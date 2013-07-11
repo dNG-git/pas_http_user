@@ -1,0 +1,42 @@
+[
+ {
+  "title_de": "Anmelden",
+  "title_de_formal": "Anmelden",
+  "title": "Log in",
+
+  "description_de": "Bitte melde dich an, um weitere Funktionen für registrierte Benutzer nutzen zu können.",
+  "description_de_formal": "Bitte melden Sie sich an, um weitere Funktionen für registrierte Benutzer nutzen zu können.",
+  "description": "Please log in to use additional features provided for registered users.",
+
+  "type": "ilink",
+  "parameters": { "m": "account", "s": "status", "a": "login" },
+  "required_user_type": "gt"
+ },
+ {
+  "title_de": "Registrieren",
+  "title_de_formal": "Registrieren",
+  "title": "Sign up",
+
+  "description_de": "Bitte melde dich an, um weitere Funktionen für registrierte Benutzer nutzen zu können.",
+  "description_de_formal": "Bitte melden Sie sich an, um weitere Funktionen für registrierte Benutzer nutzen zu können.",
+  "description": "Please log in to use additional features provided for registered users.",
+
+  "type": "ilink",
+  "parameters": { "m": "account", "s": "register" },
+  "required_setting": "pas_http_user_profile_registration_allowed",
+  "required_user_type": "gt"
+ },
+ {
+  "title_de": "Abmelden",
+  "title_de_formal": "Abmelden",
+  "title": "Log out",
+
+  "description_de": "Bitte melde dich ab, um deine aktuelle Sitzung auf diesem Gerät zu beenden",
+  "description_de_formal": "Bitte melden Sie sich ab, um Ihre aktuelle Sitzung auf diesem Gerät zu beenden.",
+  "description": "Please log out to close your current session on this device.",
+
+  "type": "ilink",
+  "parameters": { "m": "account", "s": "status", "a": "logout" },
+  "forbidden_user_type": "gt"
+ }
+]
