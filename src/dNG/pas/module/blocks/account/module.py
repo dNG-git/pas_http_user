@@ -56,6 +56,8 @@ Constructor __init__(Module)
 		"""
 Database instance
 		"""
+
+		Settings.read_file("{0}/settings/pas_user_profile.json".format(Settings.get("path_data")))
 	#
 
 	def execute(self):
@@ -66,41 +68,16 @@ Execute the requested action.
 :since: v0.1.00
 		"""
 
-		with self.database: return AbstractBlock.execute(self)
-	#
-
-	def init(self, request, response):
-	#
-		"""
-Initialize block from the given request and response.
-
-:param request: Request object
-:param response: Response object
-
-:since: v0.1.00
-		"""
-
-		AbstractBlock.init(self, request, response)
-
-		Settings.read_file("{0}/settings/pas_user_profile.json".format(Settings.get("path_data")))
-		self._init_db()
-	#
-
-	def _init_db(self):
-	#
-		"""
-Initializes the database.
-
-:since: v0.1.00
-		"""
-
-		try: self.database = Connection.get_instance()
+		try: database = Connection.get_instance()
 		except Exception as handled_exception:
 		#
 			if (self.log_handler != None): self.log_handler.error(handled_exception)
+			raise TranslatableException("core_database_error", _exception = handled_exception)
 		#
 
-		if (self.database == None): raise TranslatableException("core_database_error")
+		with database: return AbstractBlock.execute(self)
+
+		with self.database: return AbstractBlock.execute(self)
 	#
 #
 

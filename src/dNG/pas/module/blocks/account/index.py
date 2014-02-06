@@ -2,7 +2,7 @@
 ##j## BOF
 
 """
-dNG.pas.module.blocks.account.Services
+dNG.pas.module.blocks.account.Index
 """
 """n// NOTE
 ----------------------------------------------------------------------------
@@ -23,13 +23,10 @@ http://www.direct-netware.de/redirect.py?licenses;mpl2
 ----------------------------------------------------------------------------
 NOTE_END //n"""
 
-from dNG.pas.data.settings import Settings
-from dNG.pas.data.text.l10n import L10n
-from .module import Module
+from .services import Services
 
-class Services(Module):
-#
-	"""
+Index = Services
+"""
 Service for "m=account"
 
 :author:     direct Netware Group
@@ -39,38 +36,6 @@ Service for "m=account"
 :since:      v0.1.00
 :license:    http://www.direct-netware.de/redirect.py?licenses;mpl2
              Mozilla Public License, v. 2.0
-	"""
-
-	def execute_index(self):
-	#
-		"""
-Action for "index"
-
-:since: v0.1.00
-		"""
-
-		self.execute_services()
-	#
-
-	def execute_services(self):
-	#
-		"""
-Action for "services"
-
-:since: v0.1.00
-		"""
-
-		L10n.init("pas_http_user_profile")
-
-		content = {
-			"title": L10n.get("pas_http_user_profile_title_services"),
-			"service_list": { "file": "{0}/settings/lists/pas_user_profile.service.json".format(Settings.get("path_data")) }
-		}
-
-		self.response.init()
-		self.response.set_title(L10n.get("pas_http_user_profile_title_services"))
-		self.response.add_oset_content("core.service_list", content)
-	#
-#
+"""
 
 ##j## EOF

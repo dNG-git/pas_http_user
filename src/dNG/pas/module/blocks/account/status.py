@@ -25,17 +25,19 @@ NOTE_END //n"""
 
 import re
 
+from dNG.pas.controller.predefined_http_request import PredefinedHttpRequest
 from dNG.pas.data.session import Session
 from dNG.pas.data.settings import Settings
-from dNG.pas.data.traced_exception import TracedException
 from dNG.pas.data.http.translatable_exception import TranslatableException
-from dNG.pas.data.http.url import Url
 from dNG.pas.data.user.profile import Profile
 from dNG.pas.data.text.input_filter import InputFilter
 from dNG.pas.data.text.input_form import InputForm
 from dNG.pas.data.text.l10n import L10n
+from dNG.pas.data.xhtml.link import Link
+from dNG.pas.data.xhtml.notification_store import NotificationStore
 from dNG.pas.module.named_loader import NamedLoader
 from dNG.pas.plugins.hooks import Hooks
+from dNG.pas.runtime.value_exception import ValueException
 from .module import Module
 
 class Status(Module):
@@ -52,7 +54,7 @@ Service for "m=account;s=status"
              Mozilla Public License, v. 2.0
 	"""
 
-	def execute_login(self, is_safe_mode = False):
+	def execute_login(self, is_save_mode = False):
 	#
 		"""
 Action for "login"
@@ -63,9 +65,9 @@ Action for "login"
 		source = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
 		target = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
 
-		source_iline = (Url.query_param_decode(source) if (source != "") else "m=account;a=services[lang][theme]")
+		source_iline = (Link.query_param_decode(source) if (source != "") else "m=account;a=services;lang=[lang];theme=[theme]")
 
-		if (target != ""): target_iline = Url.query_param_decode(target)
+		if (target != ""): target_iline = Link.query_param_decode(target)
 		elif (Settings.is_defined("pas_http_user_profile_login_default_target_lang_{0}".format(self.request.get_lang()))): target_iline = Settings.get("pas_http_user_profile_login_default_target_lang_{0}".format(self.request.get_lang()))
 		elif (Settings.is_defined("pas_http_user_profile_login_default_target")): target_iline = Settings.get("pas_http_user_profile_login_default_target")
 		else:
@@ -76,10 +78,10 @@ Action for "login"
 
 		L10n.init("pas_http_user_profile")
 
-		Url.store_set("servicemenu", Url.TYPE_RELATIVE, L10n.get("core_back"), { "__query__": re.sub("\\[\\w+\\]", "", source_iline) }, image = "mini_default_back", priority = 2)
+		Link.store_set("servicemenu", Link.TYPE_RELATIVE, L10n.get("core_back"), { "__query__": re.sub("\\[\\w+\\]", "", source_iline) }, image = "mini_default_back", priority = 2)
 
 		form = NamedLoader.get_instance("dNG.pas.data.xhtml.form.Input", True)
-		if (is_safe_mode): form.set_input_available()
+		if (is_save_mode): form.set_input_available()
 		is_cookie_supported = Settings.get("pas_core_cookies_supported", True)
 
 		form.entry_add_text({
@@ -111,19 +113,17 @@ Action for "login"
 				]
 			}
 
-			if (not is_safe_mode): form_field['content'] = "1"
+			if (not is_save_mode): form_field['content'] = "1"
 			form.entry_add_radio(form_field)
 		#
 
-		if (is_safe_mode and form.check()):
+		if (is_save_mode and form.check()):
 		#
 			username = InputFilter.filter_control_chars(form.get_value("ausername"))
 			password = form.get_value("apassword")
-			# TODO: Remove me
-			print(password)
 
 			try: user_profile = Profile.load_username(username)
-			except TracedException as handled_exception: raise TranslatableException("pas_http_user_profile_username_or_password_invalid", 403, _exception = handled_exception)
+			except ValueException as handled_exception: raise TranslatableException("pas_http_user_profile_username_or_password_invalid", 403, _exception = handled_exception)
 
 			is_validated = (Hooks.call("dNG.pas.http.UserProfile.validateLogin", username = username, password = form.get_value("apassword", _raw_input = True)) if (Settings.get("pas_user_profile_status_mods_supported", False)) else None)
 			user_profile_data = user_profile.data_get("id", "password", "banned", "deleted", "locked", "lang", "theme")
@@ -140,19 +140,17 @@ Action for "login"
 
 			self.request.set_session(session)
 
-			target_iline = target_iline.replace("[lang]", ";lang={0}".format(user_profile_data['lang']))
-			target_iline = target_iline.replace("[theme]", ";theme={0}".format(user_profile_data['theme']))
+			target_iline = target_iline.replace("[lang]", user_profile_data['lang'])
+			target_iline = target_iline.replace("[theme]", user_profile_data['theme'])
 			target_iline = re.sub("\\[\\w+\\]", "", target_iline)
 
-			content = {
-				"task": L10n.get("pas_core_login"),
-				"message": L10n.get("pas_http_user_profile_done_login"),
-				"continue_url": Url().build_url(Url.TYPE_RELATIVE, { "__query__": target_iline })
-			}
+			NotificationStore.get_instance().add_completed_info(L10n.get("pas_http_user_profile_done_login"))
 
-			self.response.init()
-			self.response.set_title(L10n.get("pas_http_user_profile_title_login"))
-			self.response.add_oset_content("core.done", content)
+			Link.store_clear("servicemenu")
+
+			redirect_request = PredefinedHttpRequest()
+			redirect_request.set_iline(target_iline)
+			self.request.redirect(redirect_request)
 		#
 		else:
 		#
@@ -160,7 +158,7 @@ Action for "login"
 
 			content['form'] = {
 				"object": form,
-				"url_parameters": { "__request__": True, "a": "login-safe", "dsd": { "source": source, "target": target } },
+				"url_parameters": { "__request__": True, "a": "login-save", "dsd": { "source": source, "target": target } },
 				"button_title": "pas_core_login"
 			}
 
@@ -170,7 +168,7 @@ Action for "login"
 		#
 	#
 
-	def execute_login_safe(self):
+	def execute_login_save(self):
 	#
 		"""
 Action for "login"
@@ -192,9 +190,9 @@ Action for "logout"
 		source = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
 		target = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
 
-		source_iline = (Url.query_param_decode(source) if (source != "") else "")
+		source_iline = (Link.query_param_decode(source) if (source != "") else "")
 
-		if (target != ""): target_iline = Url.query_param_decode(target)
+		if (target != ""): target_iline = Link.query_param_decode(target)
 		elif (Settings.is_defined("pas_http_user_profile_logput_default_target_lang_{0}".format(self.request.get_lang()))): target_iline = Settings.get("pas_http_user_profile_logput_default_target_lang_{0}".format(self.request.get_lang()))
 		elif (Settings.is_defined("pas_http_user_profile_logput_default_target")): target_iline = Settings.get("pas_http_user_profile_logput_default_target")
 		else:
@@ -205,7 +203,7 @@ Action for "logout"
 
 		L10n.init("pas_http_user_profile")
 
-		Url.store_set("servicemenu", Url.TYPE_RELATIVE, L10n.get("core_back"), { "__query__": re.sub("\\[\\w+\\]", "", source_iline) }, image = "mini_default_back", priority = 2)
+		Link.store_set("servicemenu", Link.TYPE_RELATIVE, L10n.get("core_back"), { "__query__": re.sub("\\[\\w+\\]", "", source_iline) }, image = "mini_default_back", priority = 2)
 
 		session = Session.load(session_create = False)
 
@@ -220,7 +218,7 @@ Action for "logout"
 		content = {
 			"task": L10n.get("pas_core_logout"),
 			"message": L10n.get("pas_http_user_profile_done_logout"),
-			"continue_url": Url().build_url(Url.TYPE_RELATIVE, { "__query__": target_iline })
+			"continue_url": Link().build_url(Link.TYPE_RELATIVE, { "__query__": target_iline })
 		}
 
 		self.response.init()
