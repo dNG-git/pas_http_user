@@ -26,12 +26,13 @@ NOTE_END //n"""
 import re
 
 from dNG.pas.controller.predefined_http_request import PredefinedHttpRequest
-from dNG.pas.data.session import Session
 from dNG.pas.data.settings import Settings
 from dNG.pas.data.http.translatable_exception import TranslatableException
 from dNG.pas.data.user.profile import Profile
+from dNG.pas.data.session.implementation import Implementation as SessionImplementation
+from dNG.pas.data.text.form_processor import FormProcessor
 from dNG.pas.data.text.input_filter import InputFilter
-from dNG.pas.data.text.input_form import InputForm
+from dNG.pas.data.text.tmd5 import Tmd5
 from dNG.pas.data.text.l10n import L10n
 from dNG.pas.data.xhtml.link import Link
 from dNG.pas.data.xhtml.notification_store import NotificationStore
@@ -62,27 +63,31 @@ Action for "login"
 :since: v0.1.00
 		"""
 
-		source = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
-		target = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
+		source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
+		target_iline = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
 
-		source_iline = (Link.query_param_decode(source) if (source != "") else "m=account;a=services;lang=[lang];theme=[theme]")
+		source = ""
 
-		if (target != ""): target_iline = Link.query_param_decode(target)
-		elif (Settings.is_defined("pas_http_user_profile_login_default_target_lang_{0}".format(self.request.get_lang()))): target_iline = Settings.get("pas_http_user_profile_login_default_target_lang_{0}".format(self.request.get_lang()))
-		elif (Settings.is_defined("pas_http_user_profile_login_default_target")): target_iline = Settings.get("pas_http_user_profile_login_default_target")
-		else:
+		if (source_iline == ""): source_iline= "m=account;a=services;lang=[lang];theme=[theme]"
+		else: source = Link.query_param_encode(source_iline)
+
+		target = ""
+
+		if (target_iline == ""):
 		#
-			target = source
-			target_iline = source_iline
+			if (Settings.is_defined("pas_http_user_profile_login_default_target_lang_{0}".format(self.request.get_lang()))): target_iline = Settings.get("pas_http_user_profile_login_default_target_lang_{0}".format(self.request.get_lang()))
+			elif (Settings.is_defined("pas_http_user_profile_login_default_target")): target_iline = Settings.get("pas_http_user_profile_login_default_target")
+			else: target_iline = source_iline
 		#
+		else: target = Link.query_param_encode(target_iline)
 
 		L10n.init("pas_http_user_profile")
 
 		Link.store_set("servicemenu", Link.TYPE_RELATIVE, L10n.get("core_back"), { "__query__": re.sub("\\[\\w+\\]", "", source_iline) }, image = "mini_default_back", priority = 2)
 
-		form = NamedLoader.get_instance("dNG.pas.data.xhtml.form.Input", True)
+		form = NamedLoader.get_instance("dNG.pas.data.xhtml.form.Processor")
 		if (is_save_mode): form.set_input_available()
-		is_cookie_supported = Settings.get("pas_core_cookies_supported", True)
+		is_cookie_supported = Settings.get("pas_http_site_cookies_supported", True)
 
 		form.entry_add_text({
 			"name": "ausername",
@@ -99,7 +104,7 @@ Action for "login"
 			"title": L10n.get("pas_http_user_profile_password"),
 			"required": True,
 			"min": int(Settings.get("pas_http_user_profile_password_min", 6))
-		}, InputForm.PASSWORD_TMD5)
+		}, FormProcessor.PASSWORD_CLEARTEXT)
 
 		if (is_cookie_supported):
 		#
@@ -120,20 +125,18 @@ Action for "login"
 		if (is_save_mode and form.check()):
 		#
 			username = InputFilter.filter_control_chars(form.get_value("ausername"))
-			password = form.get_value("apassword")
+			password = Tmd5.password_hash(form.get_value("apassword"), Settings.get("pas_user_profile_password_salt"), username)
 
 			try: user_profile = Profile.load_username(username)
 			except ValueException as handled_exception: raise TranslatableException("pas_http_user_profile_username_or_password_invalid", 403, _exception = handled_exception)
 
-			is_validated = (Hooks.call("dNG.pas.http.UserProfile.validateLogin", username = username, password = form.get_value("apassword", _raw_input = True)) if (Settings.get("pas_user_profile_status_mods_supported", False)) else None)
 			user_profile_data = user_profile.data_get("id", "password", "banned", "deleted", "locked", "lang", "theme")
-			if (is_validated == None): is_validated = (password == user_profile_data['password'])
 
-			if (not is_validated or user_profile_data['deleted'] != 0): raise TranslatableException("pas_http_user_profile_username_or_password_invalid", 403)
 			if (user_profile_data['banned'] != 0): raise TranslatableException("pas_http_user_profile_banned", 403)
 			if (user_profile_data['locked'] != 0): raise TranslatableException("pas_http_user_profile_locked", 403)
+			if (user_profile_data['type_ex'] != "" or password != user_profile_data['password'] or user_profile_data['deleted'] != 0): raise TranslatableException("pas_http_user_profile_username_or_password_invalid", 403)
 
-			session = Session.load()
+			session = SessionImplementation.get_class().load()
 			session.set("session.user_id", user_profile_data['id'])
 			session.set_cookie(is_cookie_supported and form.get_value("acookie") == "1")
 			session.save()
@@ -154,7 +157,12 @@ Action for "login"
 		#
 		else:
 		#
-			content = { "title": L10n.get("pas_http_user_profile_title_login") }
+			alternative_login_links = Hooks.call("dNG.pas.http.UserProfile.getAlternativeLoginLinks")
+
+			content = {
+				"title": L10n.get("pas_http_user_profile_title_login"),
+				"alternative_login_links": (alternative_login_links if (type(alternative_login_links) == list) else [ ])
+			}
 
 			content['form'] = {
 				"object": form,
@@ -187,25 +195,21 @@ Action for "logout"
 :since: v0.1.00
 		"""
 
-		source = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
-		target = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
+		source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
+		target_iline = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
 
-		source_iline = (Link.query_param_decode(source) if (source != "") else "")
-
-		if (target != ""): target_iline = Link.query_param_decode(target)
-		elif (Settings.is_defined("pas_http_user_profile_logput_default_target_lang_{0}".format(self.request.get_lang()))): target_iline = Settings.get("pas_http_user_profile_logput_default_target_lang_{0}".format(self.request.get_lang()))
-		elif (Settings.is_defined("pas_http_user_profile_logput_default_target")): target_iline = Settings.get("pas_http_user_profile_logput_default_target")
-		else:
+		if (target_iline == ""):
 		#
-			target = source
-			target_iline = source_iline
+			if (Settings.is_defined("pas_http_user_profile_logout_default_target_lang_{0}".format(self.request.get_lang()))): target_iline = Settings.get("pas_http_user_profile_logout_default_target_lang_{0}".format(self.request.get_lang()))
+			elif (Settings.is_defined("pas_http_user_profile_logout_default_target")): target_iline = Settings.get("pas_http_user_profile_logout_default_target")
+			else: target_iline = source_iline
 		#
 
 		L10n.init("pas_http_user_profile")
 
 		Link.store_set("servicemenu", Link.TYPE_RELATIVE, L10n.get("core_back"), { "__query__": re.sub("\\[\\w+\\]", "", source_iline) }, image = "mini_default_back", priority = 2)
 
-		session = Session.load(session_create = False)
+		session = SessionImplementation.get_class().load(session_create = False)
 
 		if (session != None):
 		#
