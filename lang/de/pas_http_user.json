@@ -1,0 +1,32 @@
+{
+ "pas_http_user_email": "e-Mail-Adresse",
+ "pas_http_user_password": "Passwort",
+
+ "pas_http_user_title_login": "Als Benutzer anmelden",
+ "pas_http_user_login_use_cookie": "Sitzung dauerhaft wieder erkennen",
+ "pas_http_user_done_login": "Du wurdest erfolgreich angemeldet.",
+
+ "pas_http_user_title_registration": "Benutzer-Registrierung",
+ "pas_http_user_done_registration": "Deine Benutzer-Registrierung wurde erfolgreich abgeschlossen.",
+ "pas_http_user_done_registration_pending": "Bevor die Benutzer-Registrierung fertig gestellt wird, muss noch ein soeben an dich per E-Mail geschickter Link ausgeführt werden. Deine Angaben sind temporär im System gespeichert.",
+
+ "pas_http_user_tos": "Allgemeine Nutzungsbedingungen",
+ "pas_http_user_tos_accepted": "Allgemeinen Nutzungsbedingungen zugestimmt",
+ "pas_http_user_form_error_tos_required": "Du musst den \"Allgemeinen Nutzungsbedingungen\" zustimmen um fortfahren zu können.",
+
+ "pas_http_user_registration_pending_email_message": "Wir möchten dich nochmals im Namen des kompletten Teams herzlich willkommen heißen.",
+ "pas_http_user_registration_verification_timeout_days": "Tage bis zum Auslaufen der Registrierung",
+ "pas_http_user_registration_verification_link_required": "Für die Fertigstellung der Accountanmeldung musst du nur noch auf den nachfolgenden Link klicken.",
+
+ "pas_http_user_title_sec_id_updated": "Neue SicherheitsID zugewiesen",
+ "pas_http_user_sec_id_updated_email_message": "Nachfolgend angegeben wird deinem Benutzerprofil eine neue SicherheitsID zugewiesen. Du kannen diese ID nutzen, um einmalig dein Passwort zurück setzen zu lassen.",
+ "pas_http_user_sec_id_updated_email_burn_after_notice": "Bewahre diese ID gut auf und lösche diese E-Mail sobald wie möglich.",
+
+ "pas_http_user_title_services": "Verfügbare benutzerspezifische Funktionen",
+
+ "errors_pas_http_user_banned": "Der angegebene Benutzername wurde durch die Administration gesperrt. Entsprechend der allgemeinen Nutzungsbedingungen bist du nicht länger berechtigt diese Dienste in Anspruch zu nehmen.",
+ "errors_pas_http_user_email_exists": "Die angegebene E-Mail-Adresse existiert bereits in unserer Datenbank.",
+ "errors_pas_http_user_locked": "Der angegebene Benutzername wurde durch die Administration oder das System gesperrt.",
+ "errors_pas_http_user_username_exists": "Der angegebene Benutzername existiert bereits in unserer Datenbank.",
+ "errors_pas_http_user_username_or_password_invalid": "Der angegebene Benutzername oder dessen Passwort sind ungültig."
+}

@@ -1,4 +1,4 @@
-<article>
+<div class="pagecontent_user pagecontent_user_status_login">
 	<h1>[rewrite:content]title[/rewrite]</h1>
 [block:content:form]output.Form.render[/block]
-</article>
+</div>

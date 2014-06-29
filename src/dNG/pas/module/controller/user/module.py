@@ -2,15 +2,11 @@
 ##j## BOF
 
 """
-dNG.pas.module.blocks.account.Services
-"""
-"""n// NOTE
-----------------------------------------------------------------------------
 direct PAS
 Python Application Services
 ----------------------------------------------------------------------------
 (C) direct Netware Group - All rights reserved
-http://www.direct-netware.de/redirect.py?pas;http;user_profile
+http://www.direct-netware.de/redirect.py?pas;http;user
 
 This Source Code Form is subject to the terms of the Mozilla Public License,
 v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -20,56 +16,63 @@ http://www.direct-netware.de/redirect.py?licenses;mpl2
 ----------------------------------------------------------------------------
 #echo(pasHttpUserProfileVersion)#
 #echo(__FILEPATH__)#
-----------------------------------------------------------------------------
-NOTE_END //n"""
+"""
 
 from dNG.pas.data.settings import Settings
-from dNG.pas.data.text.l10n import L10n
-from .module import Module
+from dNG.pas.data.translatable_exception import TranslatableException
+from dNG.pas.database.connection import Connection
+from dNG.pas.module.controller.abstract_http import AbstractHttp as AbstractHttpController
 
-class Services(Module):
+class Module(AbstractHttpController):
 #
 	"""
-Service for "m=account"
+Module for "user"
 
 :author:     direct Netware Group
 :copyright:  (C) direct Netware Group - All rights reserved
 :package:    pas.http
-:subpackage: user_profile
+:subpackage: user
 :since:      v0.1.00
 :license:    http://www.direct-netware.de/redirect.py?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
 
-	def execute_index(self):
+	def __init__(self):
 	#
 		"""
-Action for "index"
+Constructor __init__(Module)
 
 :since: v0.1.00
 		"""
 
-		self.execute_services()
+		AbstractHttpController.__init__(self)
+
+		self.database = None
+		"""
+Database instance
+		"""
+
+		Settings.read_file("{0}/settings/pas_http_user.json".format(Settings.get("path_data")))
 	#
 
-	def execute_services(self):
+	def execute(self):
 	#
 		"""
-Action for "services"
+Execute the requested action.
 
 :since: v0.1.00
 		"""
 
-		L10n.init("pas_http_user_profile")
+		try: database = Connection.get_instance()
+		except Exception as handled_exception:
+		#
+			if (self.log_handler != None): self.log_handler.error(handled_exception, context = "pas_http_site")
+			raise TranslatableException("core_database_error", _exception = handled_exception)
+		#
 
-		content = {
-			"title": L10n.get("pas_http_user_profile_title_services"),
-			"service_list": { "file": "{0}/settings/lists/pas_user_profile.service.json".format(Settings.get("path_data")) }
-		}
+		with database: return AbstractHttpController.execute(self)
 
-		self.response.init()
-		self.response.set_title(L10n.get("pas_http_user_profile_title_services"))
-		self.response.add_oset_content("core.service_list", content)
+		with self.database: return AbstractHttpController.execute(self)
 	#
 #
 

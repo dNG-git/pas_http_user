@@ -9,7 +9,7 @@
   "description": "Please log in to use additional features provided for registered users.",
 
   "type": "ilink",
-  "parameters": { "m": "account", "s": "status", "a": "login" },
+  "parameters": { "m": "user", "s": "status", "a": "login" },
   "required_user_type": "gt"
  },
  {
@@ -22,8 +22,8 @@
   "description": "Please log in to use additional features provided for registered users.",
 
   "type": "ilink",
-  "parameters": { "m": "account", "s": "register" },
-  "required_setting": "pas_http_user_profile_registration_allowed",
+  "parameters": { "m": "user", "s": "register" },
+  "required_setting": "pas_http_user_registration_allowed",
   "required_user_type": "gt"
  },
  {
@@ -36,7 +36,7 @@
   "description": "Please log out to close your current session on this device.",
 
   "type": "ilink",
-  "parameters": { "m": "account", "s": "status", "a": "logout" },
+  "parameters": { "m": "user", "s": "status", "a": "logout" },
   "forbidden_user_type": "gt"
  }
 ]

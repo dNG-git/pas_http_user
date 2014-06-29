@@ -1,0 +1,32 @@
+{
+ "pas_http_user_email": "e-Mail address",
+ "pas_http_user_password": "Password",
+
+ "pas_http_user_title_login": "User log-in",
+ "pas_http_user_login_use_cookie": "Recognize session permanently",
+ "pas_http_user_done_login": "You have been logged in successfully.",
+
+ "pas_http_user_title_registration": "User registration",
+ "pas_http_user_done_registration": "Your user registration has been completed successfully.",
+ "pas_http_user_done_registration_pending": "A link has been sent to you via e-Mail. Please use this link to confirm your user registration. Your information have been saved temporarily in the system.",
+
+ "pas_http_user_tos": "Terms of service",
+ "pas_http_user_tos_accepted": "Terms of service accepted",
+ "pas_http_user_form_error_tos_required": "You have to accept the \"Terms of service\" to continue your registration.",
+
+ "pas_http_user_registration_pending_email_message": "We want to welcome you once more on behalf of the whole team.",
+ "pas_http_user_registration_verification_timeout_days": "Days until registration will time out",
+ "pas_http_user_registration_verification_link_required": "To complete the account registration you will have to click the following link.",
+
+ "pas_http_user_title_sec_id_updated": "New security ID assigned",
+ "pas_http_user_sec_id_updated_email_message": "A new security ID shown below was assigned to your user profile. You may use this ID once to reset your password.",
+ "pas_http_user_sec_id_updated_email_burn_after_notice": "Please keep this ID in a safe place and delete this e-Mail as soon as possible.",
+
+ "pas_http_user_title_services": "User centric features",
+
+ "errors_pas_http_user_banned": "The user name given has been blocked by the administration. According to the Terms Of Use you are no longer allowed to use the provided services.",
+ "errors_pas_http_user_email_exists": "The e-Mail address given does already exist in our database.",
+ "errors_pas_http_user_locked": "The user name given has been locked by the administration or the system.",
+ "errors_pas_http_user_username_exists": "The user name given does already exist in our database.",
+ "errors_pas_http_user_username_or_password_invalid": "The user name or password given is invalid."
+}
