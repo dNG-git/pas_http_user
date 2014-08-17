@@ -14,14 +14,14 @@ obtain one at http://mozilla.org/MPL/2.0/.
 ----------------------------------------------------------------------------
 http://www.direct-netware.de/redirect.py?licenses;mpl2
 ----------------------------------------------------------------------------
-#echo(pasHttpUserProfileVersion)#
+#echo(pasHttpUserVersion)#
 #echo(__FILEPATH__)#
 """
 
 from dNG.pas.plugins.hook import Hook
 from dNG.pas.runtime.value_exception import ValueException
+from dNG.pas.tasks.http.user.change_pending_email import ChangePendingEMail
 from dNG.pas.tasks.http.user.registration_email import RegistrationEMail
-from dNG.pas.tasks.http.user.registration_validated import RegistrationValidated
 from dNG.pas.tasks.http.user.update_sec_id import UpdateSecID
 
 def register_plugin():
@@ -32,15 +32,15 @@ Register plugin hooks.
 :since: v0.1.00
 	"""
 
+	Hook.register("dNG.pas.user.Profile.sendChangePendingEMail", send_change_pending_email)
 	Hook.register("dNG.pas.user.Profile.sendRegistrationEMail", send_registration_email)
-	Hook.register("dNG.pas.user.Profile.registrationValidated", registration_validated)
 	Hook.register("dNG.pas.user.Profile.updateSecID", update_sec_id)
 #
 
-def registration_validated(params, last_return = None):
+def send_change_pending_email(params, last_return = None):
 #
 	"""
-Called for "dNG.pas.user.Profile.registrationValidated"
+Called for "dNG.pas.user.Profile.sendChangePendingEMail"
 
 :param params: Parameter specified
 :param last_return: The return value from the last hook called.
@@ -50,8 +50,20 @@ Called for "dNG.pas.user.Profile.registrationValidated"
 	"""
 
 	if (last_return != None): _return = last_return
-	elif ("username" not in params or "vid" not in params): raise ValueException("Missing required argument")
-	else: _return = RegistrationValidated(params['username'], params['vid']).run()
+	elif ("username" not in params
+	      or "vid" not in params
+	      or "vid_timeout_days" not in params
+	     ): raise ValueException("Missing required arguments")
+	else:
+	#
+		ChangePendingEMail(params['username'],
+		                   params.get("recipient"),
+		                   params['vid'],
+		                   params['vid_timeout_days']
+		                  ).run()
+
+		_return = True
+	#
 
 	return _return
 #
@@ -90,7 +102,7 @@ Unregister plugin hooks.
 :since: v0.1.00
 	"""
 
-	Hook.unregister("dNG.pas.user.Profile.registrationValidated", registration_validated)
+	Hook.unregister("dNG.pas.user.Profile.sendChangePendingEMail", send_change_pending_email)
 	Hook.unregister("dNG.pas.user.Profile.sendRegistrationEMail", send_registration_email)
 	Hook.unregister("dNG.pas.user.Profile.updateSecID", update_sec_id)
 #

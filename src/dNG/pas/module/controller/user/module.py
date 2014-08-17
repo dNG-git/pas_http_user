@@ -14,7 +14,7 @@ obtain one at http://mozilla.org/MPL/2.0/.
 ----------------------------------------------------------------------------
 http://www.direct-netware.de/redirect.py?licenses;mpl2
 ----------------------------------------------------------------------------
-#echo(pasHttpUserProfileVersion)#
+#echo(pasHttpUserVersion)#
 #echo(__FILEPATH__)#
 """
 
@@ -47,11 +47,6 @@ Constructor __init__(Module)
 
 		AbstractHttpController.__init__(self)
 
-		self.database = None
-		"""
-Database instance
-		"""
-
 		Settings.read_file("{0}/settings/pas_http_user.json".format(Settings.get("path_data")))
 	#
 
@@ -63,6 +58,8 @@ Execute the requested action.
 :since: v0.1.00
 		"""
 
+		# pylint: disable=broad-except
+
 		try: database = Connection.get_instance()
 		except Exception as handled_exception:
 		#
@@ -71,8 +68,6 @@ Execute the requested action.
 		#
 
 		with database: return AbstractHttpController.execute(self)
-
-		with self.database: return AbstractHttpController.execute(self)
 	#
 #
 

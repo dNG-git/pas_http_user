@@ -1,32 +1,56 @@
 {
- "pas_http_user_email": "e-Mail-Adresse",
+ "pas_http_user_change_email": "E-Mail-Adresse ändern",
+ "pas_http_user_change_username_or_password": "Passwort ändern",
+ "pas_http_user_change_username_or_password": "Benutzernamen oder Passwort ändern",
+ "pas_http_user_lastvisit_ip": "IP beim letzten Besuch",
+ "pas_http_user_lastvisit_time": "Datum des letzten Besuches",
  "pas_http_user_password": "Passwort",
+ "pas_http_user_registration_ip": "Registrierungs-IP",
+ "pas_http_user_registration_time": "Registrierungsdatum",
+ "pas_http_user_send_email": "E-Mail senden",
 
  "pas_http_user_title_login": "Als Benutzer anmelden",
  "pas_http_user_login_use_cookie": "Sitzung dauerhaft wieder erkennen",
  "pas_http_user_done_login": "Sie wurden erfolgreich angemeldet.",
 
+ "pas_http_user_profile_edit": "Benutzerprofil bearbeiten",
+ "pas_http_user_done_profile_edit": "Das Benutzerprofil wurde erfolgreich bearbeitet.",
+
+ "pas_http_user_registration": "Registrierung",
  "pas_http_user_title_registration": "Benutzer-Registrierung",
  "pas_http_user_done_registration": "Ihre Benutzer-Registrierung wurde erfolgreich abgeschlossen.",
  "pas_http_user_done_registration_pending": "Bevor die Benutzer-Registrierung fertig gestellt wird, muss noch ein soeben an Sie per E-Mail geschickter Link ausgeführt werden. Ihre Angaben sind temporär im System gespeichert.",
+ "pas_http_user_registration_pending_email_message": "Wir möchten Sie nochmals im Namen des kompletten Teams herzlich willkommen heißen.",
+
+ "pas_http_user_title_change_profile": "Änderung des Benutzerprofils",
+ "pas_http_user_done_change_profile": "Ihre Änderungen am Benutzerprofil wurden erfolgreich übernommen.",
+ "pas_http_user_done_change_profile_pending": "Bevor Ihre Änderungen übernommen werden, muss noch ein soeben an Sie per E-Mail geschickter Link ausgeführt werden.",
+ "pas_http_user_change_profile_pending_email_message": "Ihre Änderungen am Benutzerprofil benötigen eine Überprüfung Ihrer E-Mail-Adresse.",
+
+ "pas_http_user_title_sec_id_updated": "Neue SicherheitsID zugewiesen",
+ "pas_http_user_sec_id_updated_email_message": "Nachfolgend angegeben wird Ihrem Benutzerprofil eine neue SicherheitsID zugewiesen. Sie können diese ID nutzen, um einmalig Ihr Passwort zurück setzen zu lassen.",
+ "pas_http_user_sec_id_updated_email_burn_after_notice": "Bewahren Sie diese ID gut auf und löschen Sie diese E-Mail sobald wie möglich.",
+
+ "pas_http_user_email": "e-Mail-Adresse",
+ "pas_http_user_password_current": "Aktuelles Passwort",
+ "pas_http_user_password_new": "Neues Passwort",
+ "pas_http_user_signature": "Signatur",
+ "pas_http_user_title": "Benutzertitel",
 
  "pas_http_user_tos": "Allgemeine Nutzungsbedingungen",
  "pas_http_user_tos_accepted": "Allgemeinen Nutzungsbedingungen zugestimmt",
  "pas_http_user_form_error_tos_required": "Sie müssen den \"Allgemeinen Nutzungsbedingungen\" zustimmen um fortfahren zu können.",
 
- "pas_http_user_registration_pending_email_message": "Wir möchten Sie nochmals im Namen des kompletten Teams herzlich willkommen heißen.",
- "pas_http_user_registration_verification_timeout_days": "Tage bis zum Auslaufen der Registrierung",
- "pas_http_user_registration_verification_link_required": "Für die Fertigstellung der Accountanmeldung müssen Sie nur noch auf den nachfolgenden Link klicken.",
-
- "pas_http_user_title_sec_id_updated": "Neue SicherheitsID zugewiesen",
- "pas_http_user_sec_id_updated_email_message": "Nachfolgend angegeben wird Ihrem Benutzerprofil eine neue SicherheitsID zugewiesen. Sie können diese ID nutzen, um einmalig Ihr Passwort zurück setzen zu lassen.",
- "pas_http_user_sec_id_updated_email_burn_after_notice": "Bewahren Sie diese ID gut auf und löschen Sie diese E-Mail sobald wie möglich.",
+ "pas_http_user_title_verification": "Bestätigung benötigt",
+ "pas_http_user_verification_timeout_days": "Tage bis zum Auslaufen des Links",
+ "pas_http_user_verification_link_required": "Für die Fertigstellung des Vorgangs müssen Sie nur noch auf den nachfolgenden Link klicken.",
 
  "pas_http_user_title_services": "Verfügbare benutzerspezifische Funktionen",
 
  "errors_pas_http_user_banned": "Der angegebene Benutzername wurde durch die Administration gesperrt. Entsprechend der allgemeinen Nutzungsbedingungen sind Sie nicht länger berechtigt diese Dienste in Anspruch zu nehmen.",
  "errors_pas_http_user_email_exists": "Die angegebene E-Mail-Adresse existiert bereits in unserer Datenbank.",
  "errors_pas_http_user_locked": "Der angegebene Benutzername wurde durch die Administration oder das System gesperrt.",
+ "errors_pas_http_user_password_invalid": "Das angegebene Passwort ist ungültig.",
  "errors_pas_http_user_username_exists": "Der angegebene Benutzername existiert bereits in unserer Datenbank.",
  "errors_pas_http_user_username_or_password_invalid": "Der angegebene Benutzername oder dessen Passwort sind ungültig."
 }

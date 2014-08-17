@@ -18,13 +18,12 @@ http://www.direct-netware.de/redirect.py?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.pas.data.settings import Settings
 from .verification_email_renderer import VerificationEMailRenderer
 
-class RegistrationEMailRenderer(VerificationEMailRenderer):
+class ChangePendingEMailRenderer(VerificationEMailRenderer):
 #
 	"""
-"RegistrationEMailRenderer" creates the registration e-mail.
+"ChangePendingEMailRenderer" creates the changes confirmation e-mail.
 
 :author:     direct Netware Group
 :copyright:  direct Netware Group - All rights reserved
@@ -40,7 +39,7 @@ class RegistrationEMailRenderer(VerificationEMailRenderer):
 	def __init__(self, l10n = None):
 	#
 		"""
-Constructor __init__(RegistrationEMailRenderer)
+Constructor __init__(ChangePendingEMailRenderer)
 
 :param l10n: L10n instance
 
@@ -49,10 +48,7 @@ Constructor __init__(RegistrationEMailRenderer)
 
 		VerificationEMailRenderer.__init__(self, l10n)
 
-		self.verification_details = Settings.get_lang_associated("pas_http_user_registration_welcome_text",
-		                                                         self.l10n.get_lang(),
-		                                                         self.l10n.get("pas_http_user_registration_pending_email_message")
-		                                                        )
+		self.verification_details = self.l10n.get("pas_http_user_change_profile_pending_email_message")
 	#
 #
 

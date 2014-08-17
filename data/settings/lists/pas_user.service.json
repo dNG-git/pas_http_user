@@ -27,11 +27,24 @@
   "required_user_type": "gt"
  },
  {
+  "title_de": "Benutzerprofil bearbeiten",
+  "title_de_formal": "Benutzerprofil bearbeiten",
+  "title": "Edit user profile",
+
+  "description_de": "Nutze dein Profil um dich zu beschreiben sowie deine Kontaktmöglichkeiten aktuell zu halten.",
+  "description_de_formal": "Nutzen Sie das Profil um sich zu beschreiben sowie Ihre Kontaktmöglichkeiten aktuell zu halten",
+  "description": "Use your profile to describe yourself and keep your contact information up-to-date.",
+
+  "type": "ilink",
+  "parameters": { "m": "user", "s": "profile", "a": "edit" },
+  "forbidden_user_type": "gt"
+ },
+ {
   "title_de": "Abmelden",
   "title_de_formal": "Abmelden",
   "title": "Log out",
 
-  "description_de": "Bitte melde dich ab, um deine aktuelle Sitzung auf diesem Gerät zu beenden",
+  "description_de": "Bitte melde dich ab, um deine aktuelle Sitzung auf diesem Gerät zu beenden.",
   "description_de_formal": "Bitte melden Sie sich ab, um Ihre aktuelle Sitzung auf diesem Gerät zu beenden.",
   "description": "Please log out to close your current session on this device.",
 

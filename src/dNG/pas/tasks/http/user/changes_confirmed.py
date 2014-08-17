@@ -25,11 +25,11 @@ from dNG.pas.data.text.l10n import L10n
 from dNG.pas.module.named_loader import NamedLoader
 from dNG.pas.tasks.abstract import Abstract as AbstractTask
 
-class RegistrationValidated(AbstractTask):
+class ChangesConfirmed(AbstractTask):
 #
 	"""
-The "RegistrationValidated" task is executed after the user clicked on the
-link of the registration e-mail.
+The "ChangesConfirmed" task is executed after the user clicked on the
+link of the confirmation e-mail.
 
 :author:     direct Netware Group
 :copyright:  direct Netware Group - All rights reserved
@@ -40,12 +40,13 @@ link of the registration e-mail.
              Mozilla Public License, v. 2.0
 	"""
 
-	def __init__(self, username, vid):
+	def __init__(self, username, values_changed, vid):
 	#
 		"""
-Constructor __init__(RegistrationValidated)
+Constructor __init__(ChangesConfirmed)
 
-:param username: Username validated
+:param username: Username to unlock
+:param values_changed: Dict of values changed
 :param vid: Verification ID
 
 :since: v0.1.00
@@ -55,7 +56,11 @@ Constructor __init__(RegistrationValidated)
 
 		self.username = username
 		"""
-Username validated
+Username with confirmed changes
+		"""
+		self.values_changed = values_changed
+		"""
+Dict of values changed
 		"""
 		self.vid = vid
 		"""
@@ -74,18 +79,19 @@ Task execution
 		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
 
 		user_profile = user_profile_class.load_username(self.username)
-		user_profile.unlock()
+
+		original_user_profile_data = user_profile.get_data_attributes(*self.values_changed.keys())
+
+		user_profile.set_data_attributes(**self.values_changed)
 		user_profile.save()
 
-		database_tasks_proxy = DatabaseTasksProxy.get_instance()
-
-		database_tasks_proxy.add("dNG.pas.user.Profile.updateSecID.{0}".format(self.username),
-		                         "dNG.pas.user.Profile.updateSecID",
-		                         1,
-		                         username = self.username
-		                        )
-
-		database_tasks_proxy.remove("dNG.pas.user.Profile.delete.{0}".format(self.username))
+		DatabaseTasksProxy.get_instance().add("dNG.pas.user.Profile.onEdited.{0}".format(self.username),
+		                                      "dNG.pas.user.Profile.onEdited",
+		                                      1,
+		                                      user_profile_id = user_profile.get_id(),
+		                                      user_profile_data_changed = self.values_changed,
+		                                      original_user_profile_data = original_user_profile_data
+		                                     )
 
 		task_data = DatabaseTasks.get_instance().get(self.vid)
 
@@ -95,7 +101,7 @@ Task execution
 			task_data['_task'].save()
 		#
 
-		user_profile_data = user_profile.get_data_attributes("name", "lang")
+		user_profile_data = user_profile.get_data_attributes("id", "name", "lang")
 
 		L10n.init("core", user_profile_data['lang'])
 		L10n.init("pas_core", user_profile_data['lang'])
@@ -108,10 +114,10 @@ Task execution
 		_return.set_service("http")
 		_return.set_action("done")
 
-		_return.set_parameter_chained("title", l10n.get("pas_http_user_title_registration"))
-		_return.set_parameter_chained("message", l10n.get("pas_http_user_done_registration"))
+		_return.set_parameter_chained("title", l10n.get("pas_http_user_title_change_profile"))
+		_return.set_parameter_chained("message", l10n.get("pas_http_user_done_change_profile"))
 		_return.set_parameter_chained("lang", l10n.get_lang())
-		_return.set_parameter_chained("target_iline", "m=user;s=status;a=login;lang={0}".format(user_profile_data['lang']))
+		_return.set_parameter_chained("target_iline", "m=user;s=profile;lang={0};dsd=upid+{1}".format(user_profile_data['lang'], user_profile_data['id']))
 
 		return _return
 	#

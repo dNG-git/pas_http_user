@@ -1,0 +1,10 @@
+<article>
+	<div class='pagecontent_box pagecontent_highlight_box' style='text-align: center'>
+		<h1>[rewrite:safe_content]title[/rewrite]</h1>
+[if:content:usertitle != ]
+		<p>[rewrite:formtags_content]usertitle[/rewrite]</p>
+[/if]
+[if:content:signature != ][rewrite:user_signature_box]signature[/rewrite][/if]
+	</div>
+[block:content:form]output.Form.render[/block]
+</article>

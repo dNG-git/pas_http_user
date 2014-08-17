@@ -18,14 +18,15 @@ http://www.direct-netware.de/redirect.py?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
+from dNG.pas.data.settings import Settings
 from dNG.pas.data.text.email_renderer import EMailRenderer
 from dNG.pas.data.text.l10n import L10n
+from dNG.pas.data.text.link import Link
 
-class SecIDUpdatedEMailRenderer(EMailRenderer):
+class VerificationEMailRenderer(EMailRenderer):
 #
 	"""
-"SecIDUpdatedEMailRenderer" generates an e-mail to send the "Security ID
-string".
+"VerificationEMailRenderer" creates the verification e-mail.
 
 :author:     direct Netware Group
 :copyright:  direct Netware Group - All rights reserved
@@ -36,12 +37,12 @@ string".
              Mozilla Public License, v. 2.0
 	"""
 
-	# pylint: disable=signature-differs
+	# pylint: disable=arguments-differ
 
 	def __init__(self, l10n = None):
 	#
 		"""
-Constructor __init__(SecIDUpdatedEMailRenderer)
+Constructor __init__(VerificationEMailRenderer)
 
 :param l10n: L10n instance
 
@@ -50,10 +51,18 @@ Constructor __init__(SecIDUpdatedEMailRenderer)
 
 		EMailRenderer.__init__(self, l10n)
 
+		self.verification_details = None
+		"""
+Details text about what will be verified with the task link
+		"""
+
+		Settings.read_file("{0}/settings/pas_http.json".format(Settings.get("path_data")))
+		Settings.read_file("{0}/settings/pas_http_user.json".format(Settings.get("path_data")))
+
 		L10n.init("pas_http_user", self.l10n.get_lang())
 	#
 
-	def render(self, user_profile_data, secid):
+	def render(self, user_profile_data, vid, vid_timeout_days):
 	#
 		"""
 Render header, body and footer suitable for e-mail delivery.
@@ -65,21 +74,30 @@ Render header, body and footer suitable for e-mail delivery.
 :since:  v0.1.00
 		"""
 
-		content = """
-{0}
-{1}
+		vid_url = "{0}tasks.d/{1}".format(Link.get_preferred().build_url(Link.TYPE_ABSOLUTE | Link.TYPE_BASE_PATH),
+		                                  Link.encode_query_value(vid)
+		                                 )
 
+		content = ("" if (self.verification_details == None) else self.verification_details)
+
+		content += """
+
+{0}: {1}
 {2}: {3}
 
 {4}
-		""".format(self.l10n.get("pas_http_user_sec_id_updated_email_message"),
-		           secid,
-		           self.l10n.get("pas_core_username"),
+{5}
+{6}
+		""".format(self.l10n.get("pas_core_username"),
 		           user_profile_data['name'],
-		           self.l10n.get("pas_http_user_sec_id_updated_email_burn_after_notice")
+		           self.l10n.get("pas_http_user_verification_timeout_days"),
+		           vid_timeout_days,
+		           self.l10n.get("pas_http_user_verification_link_required"),
+		           vid_url,
+		           self.l10n.get("pas_email_url_notice")
 		          )
 
-		return EMailRenderer.render(self, content, self.REASON_ON_DEMAND)
+		return EMailRenderer.render(self, content, self.REASON_FOR_VALIDATION)
 	#
 #
 
