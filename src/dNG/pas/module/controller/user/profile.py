@@ -97,6 +97,33 @@ Action for "change-email-save"
 		                                      )
 	#
 
+	def execute_change_username(self):
+	#
+		"""
+Action for "change-username"
+
+:since: v0.1.01
+		"""
+
+		self._execute_validated_profile_change(Profile.CHANGE_TYPE_USERNAME,
+		                                       "change-username"
+		                                      )
+	#
+
+	def execute_change_username_save(self):
+	#
+		"""
+Action for "change-username"
+
+:since: v0.1.01
+		"""
+
+		self._execute_validated_profile_change(Profile.CHANGE_TYPE_USERNAME,
+		                                       "change-username",
+		                                       (self.request.get_type() == "POST")
+		                                      )
+	#
+
 	def execute_change_username_password(self):
 	#
 		"""
@@ -196,23 +223,36 @@ Action for "edit"
 		               priority = 7
 		              )
 
-		Link.set_store("servicemenu",
-		               Link.TYPE_RELATIVE,
-		               (L10n.get("pas_http_user_change_username_or_password")
-		                if (Settings.get("pas_http_user_change_username_allowed", True)) else
-		                L10n.get("pas_http_user_change_password")
-		               ),
-		               { "m": "user", "s": "profile", "a": "change-username-password", "dsd": { "source": source, "target": target } },
-		               icon = "mini-default-option",
-		               priority = 3
-		              )
-
-		if (not session_user_is_administrator):
+		if (not user_profile.is_type("ex")):
 		#
 			Link.set_store("servicemenu",
 			               Link.TYPE_RELATIVE,
-			               L10n.get("pas_http_user_change_email"),
-			               { "m": "user", "s": "profile", "a": "change-email", "dsd": { "source": source, "target": target } },
+			               (L10n.get("pas_http_user_change_username_or_password")
+			                if (Settings.get("pas_http_user_change_username_allowed", True)) else
+			                L10n.get("pas_http_user_change_password")
+			               ),
+			               { "m": "user", "s": "profile", "a": "change-username-password", "dsd": { "source": source, "target": target } },
+			               icon = "mini-default-option",
+			               priority = 3
+			              )
+
+			if (not session_user_is_administrator):
+			#
+				Link.set_store("servicemenu",
+				               Link.TYPE_RELATIVE,
+				               L10n.get("pas_http_user_change_email"),
+				               { "m": "user", "s": "profile", "a": "change-email", "dsd": { "source": source, "target": target } },
+				               icon = "mini-default-option",
+				               priority = 3
+				              )
+			#
+		#
+		elif (Settings.get("pas_http_user_change_username_allowed", True)):
+		#
+			Link.set_store("servicemenu",
+			               Link.TYPE_RELATIVE,
+			               L10n.get("pas_http_user_change_username"),
+			               { "m": "user", "s": "profile", "a": "change-username", "dsd": { "source": source, "target": target } },
 			               icon = "mini-default-option",
 			               priority = 3
 			              )
@@ -334,7 +374,7 @@ Action for "edit-save"
 	def _execute_validated_profile_change(self, _type, base_action, is_save_mode = False):
 	#
 		"""
-Action for "change-email"
+Action for public "change-*" requests
 
 :since: v0.1.00
 		"""
@@ -348,7 +388,6 @@ Action for "change-email"
 		target = target_iline
 		if (target_iline == ""): target_iline = source_iline
 
-		Settings.read_file("{0}/settings/pas_user_profile.json".format(Settings.get("path_data")))
 		L10n.init("pas_http_user")
 
 		session = self.request.get_session()
@@ -380,8 +419,14 @@ Action for "change-email"
 		if (not DatabaseTasks.is_available()): raise TranslatableException("pas_core_tasks_daemon_not_available")
 
 		change_email = (_type & Profile.CHANGE_TYPE_EMAIL == Profile.CHANGE_TYPE_EMAIL)
-		change_password = (_type & Profile.CHANGE_TYPE_PASSWORD == Profile.CHANGE_TYPE_PASSWORD)
-		change_username = (_type & Profile.CHANGE_TYPE_USERNAME == Profile.CHANGE_TYPE_USERNAME)
+
+		change_password = ((not user_profile.is_type("ex"))
+		                   and _type & Profile.CHANGE_TYPE_PASSWORD == Profile.CHANGE_TYPE_PASSWORD
+		                  )
+
+		change_username = (Settings.get("pas_http_user_change_username_allowed", True)
+		                   and _type & Profile.CHANGE_TYPE_USERNAME == Profile.CHANGE_TYPE_USERNAME
+		                   )
 
 		form_id = InputFilter.filter_control_chars(self.request.get_parameter("form_id"))
 
@@ -394,12 +439,15 @@ Action for "change-email"
 
 		if (is_save_mode): form.set_input_available()
 
-		field = PasswordField("upassword")
-		field.set_title(L10n.get("pas_http_user_password_current"))
-		field.set_required()
-		field.set_limits(int(Settings.get("pas_http_user_password_min", 6)))
-		field.set_mode(PasswordField.PASSWORD_CLEARTEXT)
-		form.add(field)
+		if (not user_profile.is_type("ex")):
+		#
+			field = PasswordField("upassword")
+			field.set_title(L10n.get("pas_http_user_password_current"))
+			field.set_required()
+			field.set_limits(int(Settings.get("pas_http_user_password_min", 6)))
+			field.set_mode(PasswordField.PASSWORD_CLEARTEXT)
+			form.add(field)
+		#
 
 		if (change_username):
 		#
@@ -433,8 +481,11 @@ Action for "change-email"
 
 		if (is_save_mode and form.check()):
 		#
-			current_password = InputFilter.filter_control_chars(form.get_value("upassword"))
-			if (not user_profile.is_password_valid(current_password)): raise TranslatableError("pas_http_user_password_invalid", 403)
+			if (not user_profile.is_type("ex")):
+			#
+				current_password = InputFilter.filter_control_chars(form.get_value("upassword"))
+				if (not user_profile.is_password_valid(current_password)): raise TranslatableError("pas_http_user_password_invalid", 403)
+			#
 
 			new_email = (InputFilter.filter_control_chars(form.get_value("uemail"))
 			             if (change_email) else
@@ -478,13 +529,16 @@ Action for "change-email"
 					user_profile.set_data_attributes(**user_profile_data_changed)
 				#
 
-				if (change_password
-				    and new_password != ""
-				    and current_password != new_password
-				   ): user_profile.set_password(new_password)
-				elif (change_username
-				      and current_username != new_username
-				     ): user_profile.set_password(current_password)
+				if (not user_profile.is_type("ex")):
+				#
+					if (change_password
+					    and new_password != ""
+					    and current_password != new_password
+					   ): user_profile.set_password(new_password)
+					elif (change_username
+					      and current_username != new_username
+					     ): user_profile.set_password(current_password)
+				#
 
 				user_profile.save()
 			#

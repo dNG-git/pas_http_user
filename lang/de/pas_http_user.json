@@ -1,17 +1,24 @@
 {
+ "pas_http_user_alternative_login_methods_view": "Weitere Anmeldemöglichkeiten anzeigen",
+ "pas_http_user_alternative_login_services": "Weitere Anmeldemöglichkeiten",
  "pas_http_user_change_email": "E-Mail-Adresse ändern",
  "pas_http_user_change_password": "Passwort ändern",
+ "pas_http_user_change_username": "Benutzernamen ändern",
  "pas_http_user_change_username_or_password": "Benutzernamen oder Passwort ändern",
  "pas_http_user_lastvisit_ip": "IP beim letzten Besuch",
  "pas_http_user_lastvisit_time": "Datum des letzten Besuches",
+ "pas_http_user_logout": "Abmelden",
  "pas_http_user_password": "Passwort",
  "pas_http_user_registration_ip": "Registrierungs-IP",
  "pas_http_user_registration_time": "Registrierungsdatum",
  "pas_http_user_send_email": "E-Mail senden",
+ "pas_http_user_services": "Verfügbare benutzerspezifische Funktionen",
 
  "pas_http_user_title_login": "Als Benutzer anmelden",
  "pas_http_user_login_use_cookie": "Sitzung dauerhaft wieder erkennen",
  "pas_http_user_done_login": "Du wurdest erfolgreich angemeldet.",
+
+ "pas_http_user_done_logout": "Du wurdest erfolgreich abgemeldet.",
 
  "pas_http_user_profile_edit": "Benutzerprofil bearbeiten",
  "pas_http_user_done_profile_edit": "Das Benutzerprofil wurde erfolgreich bearbeitet.",
@@ -32,6 +39,8 @@
  "pas_http_user_sec_id_updated_email_burn_after_notice": "Bewahre diese ID gut auf und lösche diese E-Mail sobald wie möglich.",
 
  "pas_http_user_email": "E-Mail-Adresse",
+ "pas_http_user_form_error_email_exists": "Die angegebene E-Mail-Adresse existiert bereits in unserer Datenbank.",
+ "pas_http_user_form_error_username_exists": "Der angegebene Benutzername existiert bereits in unserer Datenbank.",
  "pas_http_user_password_current": "Aktuelles Passwort",
  "pas_http_user_password_new": "Neues Passwort",
  "pas_http_user_signature": "Signatur",
@@ -45,12 +54,11 @@
  "pas_http_user_verification_timeout_days": "Tage bis zum Auslaufen des Links",
  "pas_http_user_verification_link_required": "Für die Fertigstellung des Vorgangs musst du nur noch auf den nachfolgenden Link klicken.",
 
- "pas_http_user_title_services": "Verfügbare benutzerspezifische Funktionen",
-
+ "errors_pas_http_user_alternative_login_methods_disabled": "Es stehen keine weiteren Anmeldemöglichkeiten zur Verfügung.",
  "errors_pas_http_user_banned": "Der angegebene Benutzername wurde durch die Administration gesperrt. Entsprechend der allgemeinen Nutzungsbedingungen bist du nicht länger berechtigt diese Dienste in Anspruch zu nehmen.",
- "errors_pas_http_user_email_exists": "Die angegebene E-Mail-Adresse existiert bereits in unserer Datenbank.",
+ "errors_pas_http_user_feature_not_available_for_external_verified_member": "Die gewünschte Funktion steht extern geprüften Mitgliedern leider nicht zur Verfügung.",
  "errors_pas_http_user_locked": "Der angegebene Benutzername wurde durch die Administration oder das System gesperrt.",
  "errors_pas_http_user_password_invalid": "Das angegebene Passwort ist ungültig.",
- "errors_pas_http_user_username_exists": "Der angegebene Benutzername existiert bereits in unserer Datenbank.",
+ "errors_pas_http_user_pid_invalid": "Der angegebene Benutzer ist ungültig.",
  "errors_pas_http_user_username_or_password_invalid": "Der angegebene Benutzername oder dessen Passwort sind ungültig."
 }

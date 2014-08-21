@@ -1,17 +1,24 @@
 {
+ "pas_http_user_alternative_login_methods_view": "Show additional log-in possibilities",
+ "pas_http_user_alternative_login_services": "Additional log-in possibilities",
  "pas_http_user_change_email": "Change e-mail address",
- "pas_http_user_change_username_or_password": "Change password",
+ "pas_http_user_change_password": "Change password",
+ "pas_http_user_change_username": "Change user name",
  "pas_http_user_change_username_or_password": "Change user name or password",
  "pas_http_user_lastvisit_ip": "IP at last visit",
  "pas_http_user_lastvisit_time": "Date of last visit",
+ "pas_http_user_logout": "Log out",
  "pas_http_user_password": "Password",
  "pas_http_user_registration_ip": "IP at registration",
  "pas_http_user_registration_time": "Date of registration",
  "pas_http_user_send_email": "Send e-mail",
+ "pas_http_user_services": "User centric features",
 
  "pas_http_user_title_login": "User log-in",
  "pas_http_user_login_use_cookie": "Recognize session permanently",
  "pas_http_user_done_login": "You have been logged in successfully.",
+
+ "pas_http_user_done_logout": "You have been logged out successfully.",
 
  "pas_http_user_profile_edit": "Edit user profile",
  "pas_http_user_done_profile_edit": "The user profile has been edited successfully.",
@@ -32,6 +39,8 @@
  "pas_http_user_sec_id_updated_email_burn_after_notice": "Please keep this ID in a safe place and delete this e-mail as soon as possible.",
 
  "pas_http_user_email": "e-mail address",
+ "pas_http_user_form_error_email_exists": "The e-mail address given does already exist in our database.",
+ "pas_http_user_form_error_username_exists": "The user name given does already exist in our database.",
  "pas_http_user_password_current": "Current password",
  "pas_http_user_password_new": "New password",
  "pas_http_user_signature": "Signature",
@@ -45,12 +54,11 @@
  "pas_http_user_verification_timeout_days": "Days until link will time out",
  "pas_http_user_verification_link_required": "To complete the process you will have to use the following link.",
 
- "pas_http_user_title_services": "User centric features",
-
+ "errors_pas_http_user_alternative_login_methods_disabled": "Alternative login methods are not available.",
  "errors_pas_http_user_banned": "The user name given has been blocked by the administration. According to the Terms Of Use you are no longer allowed to use the provided services.",
- "errors_pas_http_user_email_exists": "The e-mail address given does already exist in our database.",
+ "errors_pas_http_user_feature_not_available_for_external_verified_member": "The requested feature is not available for externally verified members.",
  "errors_pas_http_user_locked": "The user name given has been locked by the administration or the system.",
  "errors_pas_http_user_password_invalid": "The password given is invalid.",
- "errors_pas_http_user_username_exists": "The user name given does already exist in our database.",
+ "errors_pas_http_user_pid_invalid": "The user given is invalid.",
  "errors_pas_http_user_username_or_password_invalid": "The user name or password given is invalid."
 }
