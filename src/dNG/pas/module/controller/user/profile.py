@@ -41,7 +41,6 @@ from dNG.pas.data.xhtml.form.password_field import PasswordField
 from dNG.pas.data.xhtml.form.text_field import TextField
 from dNG.pas.data.xhtml.form.processor import Processor as FormProcessor
 from dNG.pas.database.nothing_matched_exception import NothingMatchedException
-from dNG.pas.database.transaction_context import TransactionContext
 from dNG.pas.module.named_loader import NamedLoader
 from .module import Module
 
@@ -504,44 +503,41 @@ Action for public "change-*" requests
 
 			user_profile_data_changed = { }
 
-			with TransactionContext():
+			if (change_email and current_email != new_email):
 			#
-				if (change_email and current_email != new_email):
+				try:
 				#
-					try:
-					#
-						user_profile_class.load_email(new_email, True)
-						raise TranslatableError("pas_http_user_email_exists", 403)
-					#
-					except NothingMatchedException: pass
+					user_profile_class.load_email(new_email, True)
+					raise TranslatableError("pas_http_user_email_exists", 403)
 				#
-
-				if (change_username and current_username != new_username):
-				#
-					try:
-					#
-						user_profile_class.load_username(new_username, True)
-						raise TranslatableError("pas_http_user_username_exists", 403)
-					#
-					except NothingMatchedException: pass
-
-					user_profile_data_changed['name'] = new_username
-					user_profile.set_data_attributes(**user_profile_data_changed)
-				#
-
-				if (not user_profile.is_type("ex")):
-				#
-					if (change_password
-					    and new_password != ""
-					    and current_password != new_password
-					   ): user_profile.set_password(new_password)
-					elif (change_username
-					      and current_username != new_username
-					     ): user_profile.set_password(current_password)
-				#
-
-				user_profile.save()
+				except NothingMatchedException: pass
 			#
+
+			if (change_username and current_username != new_username):
+			#
+				try:
+				#
+					user_profile_class.load_username(new_username, True)
+					raise TranslatableError("pas_http_user_username_exists", 403)
+				#
+				except NothingMatchedException: pass
+
+				user_profile_data_changed['name'] = new_username
+				user_profile.set_data_attributes(**user_profile_data_changed)
+			#
+
+			if (not user_profile.is_type("ex")):
+			#
+				if (change_password
+				    and new_password != ""
+				    and current_password != new_password
+				   ): user_profile.set_password(new_password)
+				elif (change_username
+				      and current_username != new_username
+				     ): user_profile.set_password(current_password)
+			#
+
+			user_profile.save()
 
 			database_tasks = DatabaseTasks.get_instance()
 			username = (new_username if (new_username != None) else current_username)

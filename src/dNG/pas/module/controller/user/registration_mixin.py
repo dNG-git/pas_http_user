@@ -262,24 +262,24 @@ Action for "register"
 
 			user_profile = user_profile_class()
 
+			user_profile_data = { "name": username,
+			                      "lang": self.request.get_lang(),
+			                      "email": email
+			                    }
+
+			if (ex_type == None):
+			#
+				password = InputFilter.filter_control_chars(form.get_value("upassword"))
+				user_profile.set_password(password)
+			#
+			else:
+			#
+				user_profile_data['type'] = user_profile_class.TYPE_EXTERNAL_VERIFIED_MEMBER
+				user_profile_data['type_ex'] = ex_type
+			#
+
 			with TransactionContext():
 			#
-				user_profile_data = { "name": username,
-				                      "lang": self.request.get_lang(),
-				                      "email": email
-				                    }
-
-				if (ex_type == None):
-				#
-					password = InputFilter.filter_control_chars(form.get_value("upassword"))
-					user_profile.set_password(password)
-				#
-				else:
-				#
-					user_profile_data['type'] = user_profile_class.TYPE_EXTERNAL_VERIFIED_MEMBER
-					user_profile_data['type_ex'] = ex_type
-				#
-
 				user_profile.set_data_attributes(**user_profile_data)
 
 				if (not is_email_verified): user_profile.lock()

@@ -93,7 +93,7 @@ Action for "login"
 		   ):
 		#
 			Link.set_store("servicemenu",
-			               (Link.TYPE_RELATIVE | Link.TYPE_JS_REQUIRED),
+			               Link.TYPE_RELATIVE,
 			               L10n.get("pas_http_user_alternative_login_methods_view"),
 			               { "__request__": True, "a": "login-alternatives-list", "dsd": { "source": source, "target": target } },
 			               icon = "mini-default-option",
