@@ -72,7 +72,7 @@ Form validator that checks if the e-mail is not already registered.
 
 		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
 
-		if (user_profile_class == None): _return = L10n.get("pas_http_core_form_error_internal_error")
+		if (user_profile_class is None): _return = L10n.get("pas_http_core_form_error_internal_error")
 		else:
 		#
 			try:
@@ -117,7 +117,7 @@ Form validator that checks if the user name is not already registered.
 
 		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
 
-		if (user_profile_class == None): _return = L10n.get("pas_http_core_form_error_internal_error")
+		if (user_profile_class is None): _return = L10n.get("pas_http_core_form_error_internal_error")
 		else:
 		#
 			try:
@@ -168,7 +168,7 @@ Action for "register"
 		if (self.response.is_supported("html_css_files")): self.response.add_theme_css_file("mini_default_sprite.min.css")
 
 		Link.set_store("servicemenu",
-		               Link.TYPE_RELATIVE,
+		               Link.TYPE_RELATIVE_URL,
 		               L10n.get("core_back"),
 		               { "__query__": re.sub("\\_\\_\\w+\\_\\_", "", source_iline) },
 		               icon = "mini-default-back",
@@ -182,7 +182,7 @@ Action for "register"
 		form = FormProcessor(form_id)
 		if (is_save_mode): form.set_input_available()
 
-		is_email_verified = (email != None)
+		is_email_verified = (email is not None)
 
 		if (not is_email_verified):
 		#
@@ -194,7 +194,7 @@ Action for "register"
 			form.add(field)
 		#
 
-		if (username == None):
+		if (username is None):
 		#
 			field = TextField("uusername")
 			field.set_required()
@@ -220,7 +220,7 @@ Action for "register"
 			form.add(field)
 		#
 
-		if (ex_type == None):
+		if (ex_type is None):
 		#
 			field = PasswordField("upassword")
 			field.set_title(L10n.get("pas_http_user_password"))
@@ -255,10 +255,10 @@ Action for "register"
 		if (is_save_mode and form.check()):
 		#
 			if (not is_email_verified): email = InputFilter.filter_email_address(form.get_value("uemail"))
-			if (username == None): username = InputFilter.filter_control_chars(form.get_value("uusername"))
+			if (username is None): username = InputFilter.filter_control_chars(form.get_value("uusername"))
 
 			user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
-			if (user_profile_class == None): raise TranslatableError("core_unknown_error")
+			if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 			user_profile = user_profile_class()
 
@@ -267,7 +267,7 @@ Action for "register"
 			                      "email": email
 			                    }
 
-			if (ex_type == None):
+			if (ex_type is None):
 			#
 				password = InputFilter.filter_control_chars(form.get_value("upassword"))
 				user_profile.set_password(password)

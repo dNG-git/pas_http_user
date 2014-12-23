@@ -188,12 +188,12 @@ Action for "edit"
 		session_user_pid = None
 		session_user_profile = None
 
-		if (session != None):
+		if (session is not None):
 		#
 			session_user_pid = session.get_user_id()
 			session_user_profile = session.get_user_profile()
 
-			if (session_user_profile != None):
+			if (session_user_profile is not None):
 			#
 				if (session_user_profile.is_valid()): session_user_is_administrator = session_user_profile.is_type("ad")
 				if (pid == ""): pid = session_user_pid
@@ -203,7 +203,7 @@ Action for "edit"
 		if (pid == ""): raise TranslatableError("pas_http_user_pid_invalid", 404)
 
 		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
-		if (user_profile_class == None): raise TranslatableError("core_unknown_error")
+		if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 		try: user_profile = user_profile_class.load_id(pid)
 		except NothingMatchedException as handled_exception: raise TranslatableError("pas_http_user_pid_invalid", 404, _exception = handled_exception)
@@ -215,7 +215,7 @@ Action for "edit"
 		if (self.response.is_supported("html_css_files")): self.response.add_theme_css_file("mini_default_sprite.min.css")
 
 		Link.set_store("servicemenu",
-		               Link.TYPE_RELATIVE,
+		               Link.TYPE_RELATIVE_URL,
 		               L10n.get("core_back"),
 		               { "__query__": re.sub("\\_\\_\\w+\\_\\_", "", source_iline) },
 		               icon = "mini-default-back",
@@ -225,7 +225,7 @@ Action for "edit"
 		if (not user_profile.is_type("ex")):
 		#
 			Link.set_store("servicemenu",
-			               Link.TYPE_RELATIVE,
+			               Link.TYPE_RELATIVE_URL,
 			               (L10n.get("pas_http_user_change_username_or_password")
 			                if (Settings.get("pas_http_user_change_username_allowed", True)) else
 			                L10n.get("pas_http_user_change_password")
@@ -238,7 +238,7 @@ Action for "edit"
 			if (not session_user_is_administrator):
 			#
 				Link.set_store("servicemenu",
-				               Link.TYPE_RELATIVE,
+				               Link.TYPE_RELATIVE_URL,
 				               L10n.get("pas_http_user_change_email"),
 				               { "m": "user", "s": "profile", "a": "change-email", "dsd": { "source": source, "target": target } },
 				               icon = "mini-default-option",
@@ -249,7 +249,7 @@ Action for "edit"
 		elif (Settings.get("pas_http_user_change_username_allowed", True)):
 		#
 			Link.set_store("servicemenu",
-			               Link.TYPE_RELATIVE,
+			               Link.TYPE_RELATIVE_URL,
 			               L10n.get("pas_http_user_change_username"),
 			               { "m": "user", "s": "profile", "a": "change-username", "dsd": { "source": source, "target": target } },
 			               icon = "mini-default-option",
@@ -266,7 +266,6 @@ Action for "edit"
 		user_profile_data = user_profile.get_data_attributes("name", "email", "signature", "title")
 
 		email = user_profile_data['email']
-		signature = user_profile_data['signature']
 		title = user_profile_data['title']
 
 		if (is_save_mode): form.set_input_available()
@@ -290,7 +289,7 @@ Action for "edit"
 
 		field = FormTagsTextareaField("usignature")
 		field.set_title(L10n.get("pas_http_user_signature"))
-		field.set_value(signature)
+		field.set_value(user_profile_data['signature'])
 		field.set_size(FormTagsTextareaField.SIZE_SMALL)
 		field.set_limits(_max = 255)
 		form.add(field)
@@ -392,11 +391,11 @@ Action for public "change-*" requests
 		session = self.request.get_session()
 
 		pid = None
-		if (session != None): pid = session.get_user_id()
-		if (pid == None): raise TranslatableError("pas_http_user_pid_invalid", 404)
+		if (session is not None): pid = session.get_user_id()
+		if (pid is None): raise TranslatableError("pas_http_user_pid_invalid", 404)
 
 		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
-		if (user_profile_class == None): raise TranslatableError("core_unknown_error")
+		if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 		try: user_profile = user_profile_class.load_id(pid)
 		except NothingMatchedException as handled_exception: raise TranslatableError("pas_http_user_pid_invalid", 404, _exception = handled_exception)
@@ -408,7 +407,7 @@ Action for public "change-*" requests
 		if (source_iline == ""): source_iline = "m=user;s=profile;a=edit;dsd=upid+{0}".format(Link.encode_query_value(pid))
 
 		Link.set_store("servicemenu",
-		               Link.TYPE_RELATIVE,
+		               Link.TYPE_RELATIVE_URL,
 		               L10n.get("core_back"),
 		               { "__query__": re.sub("\\_\\_\\w+\\_\\_", "", source_iline) },
 		               icon = "mini-default-back",
@@ -540,7 +539,7 @@ Action for public "change-*" requests
 			user_profile.save()
 
 			database_tasks = DatabaseTasks.get_instance()
-			username = (new_username if (new_username != None) else current_username)
+			username = (new_username if (new_username is not None) else current_username)
 
 			if (len(user_profile_data_changed) > 0):
 			#
@@ -635,12 +634,12 @@ Action for "view"
 		session_user_pid = None
 		session_user_profile = None
 
-		if (session != None):
+		if (session is not None):
 		#
 			session_user_pid = session.get_user_id()
 			session_user_profile = session.get_user_profile()
 
-			if (session_user_profile != None and session_user_profile.is_valid()):
+			if (session_user_profile is not None and session_user_profile.is_valid()):
 			#
 				session_user_is_administrator = session_user_profile.is_type("ad")
 				if (pid == ""): pid = session_user_pid
@@ -651,7 +650,7 @@ Action for "view"
 		if (pid == ""): raise TranslatableError("pas_http_user_pid_invalid", 404)
 
 		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
-		if (user_profile_class == None): raise TranslatableError("core_unknown_error")
+		if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 		try: user_profile = user_profile_class.load_id(pid)
 		except NothingMatchedException as handled_exception: raise TranslatableError("pas_http_user_pid_invalid", 404, _exception = handled_exception)
@@ -661,17 +660,17 @@ Action for "view"
 		if (self.response.is_supported("html_css_files")): self.response.add_theme_css_file("mini_default_sprite.min.css")
 
 		Link.set_store("servicemenu",
-		               Link.TYPE_RELATIVE,
+		               Link.TYPE_RELATIVE_URL,
 		               L10n.get("core_back"),
 		               { "__query__": re.sub("\\_\\_\\w+\\_\\_", "", source_iline) },
 		               icon = "mini-default-back",
 		               priority = 7
 		              )
 
-		if (session_user_pid != None):
+		if (session_user_pid is not None):
 		#
 			Link.set_store("servicemenu",
-			               Link.TYPE_RELATIVE,
+			               Link.TYPE_RELATIVE_URL,
 			               L10n.get("pas_http_user_profile_edit"),
 			               { "m": "user", "s": "profile", "a": "edit", "dsd": { "source": source } },
 			               icon = "mini-default-option",
@@ -694,7 +693,7 @@ Action for "view"
 		form = FormProcessor(False)
 
 		if (user_profile_data['email'] != ""
-		    and session_user_profile != None
+		    and session_user_profile is not None
 		    and session_user_profile.is_valid()
 		   ):
 		#
@@ -704,7 +703,7 @@ Action for "view"
 			if (session_user_is_administrator or user_profile_data['email_public']): field.set_value(user_profile_data['email'])
 			else: field.set_value(L10n.get("pas_http_user_send_email"))
 
-			field.set_link(Link().build_url(Link.TYPE_RELATIVE,
+			field.set_link(Link().build_url(Link.TYPE_RELATIVE_URL,
 			                                { "m": "user", "s": "email", "dsd": { "upid": pid } }
 			                               )
 			              )

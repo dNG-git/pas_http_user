@@ -35,7 +35,7 @@ Called for "dNG.pas.user.Profile.changesConfirmed"
 :since:  v0.1.00
 	"""
 
-	if (last_return != None): _return = last_return
+	if (last_return is not None): _return = last_return
 	elif ("username" not in params
 	      or "values_changed" not in params
 	      or "vid" not in params
@@ -69,7 +69,7 @@ Called for "dNG.pas.user.Profile.registrationValidated"
 :since:  v0.1.00
 	"""
 
-	if (last_return != None): _return = last_return
+	if (last_return is not None): _return = last_return
 	elif ("username" not in params or "vid" not in params): raise ValueException("Missing required arguments")
 	else: _return = RegistrationValidated(params['username'], params['vid']).run()
 

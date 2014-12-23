@@ -89,7 +89,7 @@ Task execution
 
 		task_data = DatabaseTasks.get_instance().get(self.vid)
 
-		if (task_data != None and "_task" in task_data):
+		if (task_data is not None and "_task" in task_data):
 		#
 			task_data['_task'].set_status_completed()
 			task_data['_task'].save()

@@ -108,7 +108,7 @@ Task execution
 :since: v0.1.00
 		"""
 
-		if (self.__class__.EMAIL_RENDERER == None): raise ValueException("Defined e-mail renderer is invalid")
+		if (self.__class__.EMAIL_RENDERER is None): raise ValueException("Defined e-mail renderer is invalid")
 
 		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
 		user_profile = user_profile_class.load_username(self.username)
@@ -116,7 +116,7 @@ Task execution
 		user_profile_data = user_profile.get_data_attributes("name", "lang", "email")
 
 		email = self.get_email_recipient()
-		if (email == None): email = user_profile_data['email']
+		if (email is None): email = user_profile_data['email']
 
 		L10n.init("core", user_profile_data['lang'])
 		L10n.init("pas_core", user_profile_data['lang'])
@@ -128,7 +128,7 @@ Task execution
 		content = email_renderer.render(user_profile_data, self.vid, self.vid_timeout_days)
 
 		subject = self.get_email_subject(l10n)
-		if (subject == None): subject = l10n.get("pas_http_user_title_verification")
+		if (subject is None): subject = l10n.get("pas_http_user_title_verification")
 
 		part = Part(Part.TYPE_MESSAGE_BODY, "text/plain", content)
 

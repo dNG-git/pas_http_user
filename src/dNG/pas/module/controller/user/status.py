@@ -23,6 +23,7 @@ import re
 from dNG.pas.controller.predefined_http_request import PredefinedHttpRequest
 from dNG.pas.data.settings import Settings
 from dNG.pas.data.http.translatable_error import TranslatableError
+from dNG.pas.data.http.translatable_exception import TranslatableException
 from dNG.pas.data.session.implementation import Implementation as Session
 from dNG.pas.data.text.input_filter import InputFilter
 from dNG.pas.data.text.l10n import L10n
@@ -62,7 +63,7 @@ Action for "login"
 		target_iline = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
 
 		source = source_iline
-		if (source_iline == ""): source_iline = "m=user;a=services;lang=__lang__;theme=__theme__"
+		if (source_iline == ""): source_iline = "m=user;a=services"
 
 		target = target_iline
 
@@ -70,6 +71,7 @@ Action for "login"
 		#
 			if (Settings.is_defined("pas_http_user_login_default_target_lang_{0}".format(self.request.get_lang()))): target_iline = Settings.get("pas_http_user_login_default_target_lang_{0}".format(self.request.get_lang()))
 			elif (Settings.is_defined("pas_http_user_login_default_target")): target_iline = Settings.get("pas_http_user_login_default_target")
+			elif (source == ""): target_iline = "m=user;a=services;lang=__lang__;theme=__theme__"
 			else: target_iline = source_iline
 		#
 
@@ -79,7 +81,7 @@ Action for "login"
 		if (self.response.is_supported("html_css_files")): self.response.add_theme_css_file("mini_default_sprite.min.css")
 
 		Link.set_store("servicemenu",
-		               Link.TYPE_RELATIVE,
+		               Link.TYPE_RELATIVE_URL,
 		               L10n.get("core_back"),
 		               { "__query__": re.sub("\\_\\_\\w+\\_\\_", "", source_iline) },
 		               icon = "mini-default-back",
@@ -89,11 +91,11 @@ Action for "login"
 		is_cookie_supported = Settings.get("pas_http_site_cookies_supported", True)
 
 		if (is_cookie_supported
-		    and type(Settings.get("pas_http_user_alternative_login_services_list")) == list
+		    and type(Settings.get("pas_http_user_alternative_login_services_list")) is list
 		   ):
 		#
 			Link.set_store("servicemenu",
-			               Link.TYPE_RELATIVE,
+			               Link.TYPE_RELATIVE_URL,
 			               L10n.get("pas_http_user_alternative_login_methods_view"),
 			               { "__request__": True, "a": "login-alternatives-list", "dsd": { "source": source, "target": target } },
 			               icon = "mini-default-option",
@@ -141,7 +143,7 @@ Action for "login"
 			password = InputFilter.filter_control_chars(form.get_value("upassword"))
 
 			user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
-			if (user_profile_class == None): raise TranslatableError("core_unknown_error")
+			if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 			try: user_profile = user_profile_class.load_username(username)
 			except NothingMatchedException as handled_exception: raise TranslatableError("pas_http_user_username_or_password_invalid", 403, _exception = handled_exception)
@@ -229,13 +231,13 @@ Action for "login-alternatives-list"
 		services_list = Settings.get("pas_http_user_alternative_login_services_list")
 
 		if ((not Settings.get("pas_http_site_cookies_supported", True))
-		    or type(services_list) != list
+		    or type(services_list) is not list
 		   ): raise TranslatableError("pas_http_user_alternative_login_methods_disabled", 403)
 
 		if (self.response.is_supported("html_css_files")): self.response.add_theme_css_file("mini_default_sprite.min.css")
 
 		Link.set_store("servicemenu",
-		               Link.TYPE_RELATIVE,
+		               Link.TYPE_RELATIVE_URL,
 		               L10n.get("core_back"),
 		               { "__query__": re.sub("\\_\\_\\w+\\_\\_", "", source_iline) },
 		               icon = "mini-default-back",
@@ -250,7 +252,7 @@ Action for "login-alternatives-list"
 			#
 				extended_service = service.copy()
 
-				extended_service['type'] = Link.TYPE_RELATIVE
+				extended_service['type'] = Link.TYPE_RELATIVE_URL
 				if ("dsd" not in extended_service['parameters']): extended_service['parameters']['dsd'] = { }
 				extended_service['parameters']['dsd']['usid'] = service['id']
 				extended_service['parameters']['dsd']['source'] = source
@@ -292,7 +294,7 @@ Action for "logout"
 		if (self.response.is_supported("html_css_files")): self.response.add_theme_css_file("mini_default_sprite.min.css")
 
 		Link.set_store("servicemenu",
-		               Link.TYPE_RELATIVE,
+		               Link.TYPE_RELATIVE_URL,
 		               L10n.get("core_back"),
 		               { "__query__": re.sub("\\_\\_\\w+\\_\\_", "", source_iline) },
 		               icon = "mini-default-back",
@@ -301,7 +303,7 @@ Action for "logout"
 
 		session = Session.get_class().load(session_create = False)
 
-		if (session != None):
+		if (session is not None):
 		#
 			session.delete()
 			self.request.set_session(None)

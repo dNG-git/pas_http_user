@@ -74,11 +74,11 @@ Render header, body and footer suitable for e-mail delivery.
 :since:  v0.1.00
 		"""
 
-		vid_url = "{0}tasks.d/{1}".format(Link.get_preferred().build_url(Link.TYPE_ABSOLUTE | Link.TYPE_BASE_PATH),
+		vid_url = "{0}tasks.d/{1}".format(Link.get_preferred().build_url(Link.TYPE_ABSOLUTE_URL | Link.TYPE_BASE_PATH),
 		                                  Link.encode_query_value(vid)
 		                                 )
 
-		content = ("" if (self.verification_details == None) else self.verification_details)
+		content = ("" if (self.verification_details is None) else self.verification_details)
 
 		content += """
 

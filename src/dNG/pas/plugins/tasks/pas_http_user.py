@@ -49,7 +49,7 @@ Called for "dNG.pas.user.Profile.sendChangePendingEMail"
 :since:  v0.1.00
 	"""
 
-	if (last_return != None): _return = last_return
+	if (last_return is not None): _return = last_return
 	elif ("username" not in params
 	      or "vid" not in params
 	      or "vid_timeout_days" not in params
@@ -80,7 +80,7 @@ Called for "dNG.pas.user.Profile.sendRegistrationEMail"
 :since:  v0.1.00
 	"""
 
-	if (last_return != None): _return = last_return
+	if (last_return is not None): _return = last_return
 	elif ("username" not in params
 	      or "vid" not in params
 	      or "vid_timeout_days" not in params
@@ -119,7 +119,7 @@ Called for "dNG.pas.user.Profile.updateSecID"
 :since:  v0.1.00
 	"""
 
-	if (last_return != None): _return = last_return
+	if (last_return is not None): _return = last_return
 	elif ("username" not in params): raise ValueException("Missing required argument")
 	else:
 	#
