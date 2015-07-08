@@ -9,6 +9,7 @@
  "pas_http_user_lastvisit_time": "Date of last visit",
  "pas_http_user_logout": "Log out",
  "pas_http_user_password": "Password",
+ "pas_http_user_profile_edit": "Edit user profile",
  "pas_http_user_registration_ip": "IP at registration",
  "pas_http_user_registration_time": "Date of registration",
  "pas_http_user_send_email": "Send e-mail",
@@ -19,9 +20,6 @@
  "pas_http_user_done_login": "You have been logged in successfully.",
 
  "pas_http_user_done_logout": "You have been logged out successfully.",
-
- "pas_http_user_profile_edit": "Edit user profile",
- "pas_http_user_done_profile_edit": "The user profile has been edited successfully.",
 
  "pas_http_user_registration": "Registration",
  "pas_http_user_title_registration": "User registration",

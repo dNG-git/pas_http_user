@@ -9,6 +9,7 @@
  "pas_http_user_lastvisit_time": "Datum des letzten Besuches",
  "pas_http_user_logout": "Abmelden",
  "pas_http_user_password": "Passwort",
+ "pas_http_user_profile_edit": "Benutzerprofil bearbeiten",
  "pas_http_user_registration_ip": "Registrierungs-IP",
  "pas_http_user_registration_time": "Registrierungsdatum",
  "pas_http_user_send_email": "E-Mail senden",
@@ -19,9 +20,6 @@
  "pas_http_user_done_login": "Du wurdest erfolgreich angemeldet.",
 
  "pas_http_user_done_logout": "Du wurdest erfolgreich abgemeldet.",
-
- "pas_http_user_profile_edit": "Benutzerprofil bearbeiten",
- "pas_http_user_done_profile_edit": "Das Benutzerprofil wurde erfolgreich bearbeitet.",
 
  "pas_http_user_registration": "Registrierung",
  "pas_http_user_title_registration": "Benutzer-Registrierung",

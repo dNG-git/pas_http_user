@@ -222,6 +222,8 @@ Action for "edit"
 		               priority = 7
 		              )
 
+		edit_source = ("m=user;s=profile;a=edit;dsd=upid+{0}".format(Link.encode_query_value(pid)) if (source == "") else source)
+
 		if (not user_profile.is_type("ex")):
 		#
 			Link.set_store("servicemenu",
@@ -230,7 +232,7 @@ Action for "edit"
 			                if (Settings.get("pas_http_user_change_username_allowed", True)) else
 			                L10n.get("pas_http_user_change_password")
 			               ),
-			               { "m": "user", "s": "profile", "a": "change-username-password", "dsd": { "source": source, "target": target } },
+			               { "m": "user", "s": "profile", "a": "change-username-password", "dsd": { "source": edit_source, "target": target } },
 			               icon = "mini-default-option",
 			               priority = 3
 			              )
@@ -240,7 +242,7 @@ Action for "edit"
 				Link.set_store("servicemenu",
 				               Link.TYPE_RELATIVE_URL,
 				               L10n.get("pas_http_user_change_email"),
-				               { "m": "user", "s": "profile", "a": "change-email", "dsd": { "source": source, "target": target } },
+				               { "m": "user", "s": "profile", "a": "change-email", "dsd": { "source": edit_source, "target": target } },
 				               icon = "mini-default-option",
 				               priority = 3
 				              )
@@ -251,7 +253,7 @@ Action for "edit"
 			Link.set_store("servicemenu",
 			               Link.TYPE_RELATIVE_URL,
 			               L10n.get("pas_http_user_change_username"),
-			               { "m": "user", "s": "profile", "a": "change-username", "dsd": { "source": source, "target": target } },
+			               { "m": "user", "s": "profile", "a": "change-username", "dsd": { "source": edit_source, "target": target } },
 			               icon = "mini-default-option",
 			               priority = 3
 			              )
@@ -332,7 +334,7 @@ Action for "edit"
 			target_iline = target_iline.replace("__id_d__", pid)
 			target_iline = re.sub("\\_\\_\\w+\\_\\_", "", target_iline)
 
-			NotificationStore.get_instance().add_completed_info(L10n.get("pas_http_user_done_profile_edit"))
+			NotificationStore.get_instance().add_completed_info(L10n.get("pas_http_user_done_change_profile"))
 
 			Link.clear_store("servicemenu")
 
@@ -342,7 +344,7 @@ Action for "edit"
 		#
 		else:
 		#
-			content = { "title": L10n.get("pas_http_user_profile_edit") }
+			content = { "title": L10n.get("pas_http_user_title_change_profile") }
 
 			content['form'] = { "object": form,
 			                    "url_parameters": { "__request__": True,
@@ -353,7 +355,7 @@ Action for "edit"
 			                  }
 
 			self.response.init()
-			self.response.set_title(L10n.get("pas_http_user_profile_edit"))
+			self.response.set_title(L10n.get("pas_http_user_title_change_profile"))
 			self.response.add_oset_content("core.form", content)
 		#
 	#
