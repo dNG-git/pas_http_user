@@ -104,7 +104,7 @@ Action for "services"
 		          }
 
 		self.response.init()
-		self.response.set_title(L10n.get("pas_http_user_services"))
+		self.response.set_title(content['title'])
 		self.response.add_oset_content("core.service_list", content)
 	#
 #

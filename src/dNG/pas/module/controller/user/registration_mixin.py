@@ -324,7 +324,7 @@ Action for "register"
 			                  }
 
 			self.response.init()
-			self.response.set_title(L10n.get("pas_http_user_registration"))
+			self.response.set_title(content['title'])
 			self.response.add_oset_content("core.form", content)
 		#
 	#
