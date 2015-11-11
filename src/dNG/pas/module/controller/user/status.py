@@ -158,7 +158,7 @@ Action for "login"
 			    or (not user_profile.is_password_valid(password))
 			   ): raise TranslatableError("pas_http_user_username_or_password_invalid", 403)
 
-			session = Session.get_class().load()
+			session = Session.load()
 			session.set("session.user_id", user_profile_data['id'])
 			session.set_cookie(is_cookie_supported and form.get_value("ucookie") == "1")
 			session.save()
@@ -187,7 +187,7 @@ Action for "login"
 			                  }
 
 			self.response.init()
-			self.response.set_title(L10n.get("pas_http_user_title_login"))
+			self.response.set_title(content['title'])
 			self.response.add_oset_content("user.status.login", content)
 		#
 	#
@@ -267,7 +267,7 @@ Action for "login-alternatives-list"
 		          }
 
 		self.response.init()
-		self.response.set_title(L10n.get("pas_http_user_alternative_login_services"))
+		self.response.set_title(content['title'])
 		self.response.add_oset_content("core.service_list", content)
 	#
 
@@ -301,7 +301,7 @@ Action for "logout"
 		               priority = 7
 		              )
 
-		session = Session.get_class().load(session_create = False)
+		session = Session.load(session_create = False)
 
 		if (session is not None):
 		#
