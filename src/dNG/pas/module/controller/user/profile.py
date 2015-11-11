@@ -38,8 +38,9 @@ from dNG.pas.data.xhtml.form.form_tags_text_field import FormTagsTextField
 from dNG.pas.data.xhtml.form.form_tags_textarea_field import FormTagsTextareaField
 from dNG.pas.data.xhtml.form.info_field import InfoField
 from dNG.pas.data.xhtml.form.password_field import PasswordField
-from dNG.pas.data.xhtml.form.text_field import TextField
 from dNG.pas.data.xhtml.form.processor import Processor as FormProcessor
+from dNG.pas.data.xhtml.form.text_field import TextField
+from dNG.pas.data.xhtml.form.view import View as FormView
 from dNG.pas.database.nothing_matched_exception import NothingMatchedException
 from dNG.pas.module.named_loader import NamedLoader
 from .module import Module
@@ -355,7 +356,7 @@ Action for "edit"
 			                  }
 
 			self.response.init()
-			self.response.set_title(L10n.get("pas_http_user_title_change_profile"))
+			self.response.set_title(content['title'])
 			self.response.add_oset_content("core.form", content)
 		#
 	#
@@ -608,7 +609,7 @@ Action for public "change-*" requests
 			                  }
 
 			self.response.init()
-			self.response.set_title(L10n.get("pas_http_user_title_change_profile"))
+			self.response.set_title(content['title'])
 			self.response.add_oset_content("core.form", content)
 		#
 	#
@@ -692,7 +693,7 @@ Action for "view"
 		                                                     "lastvisit_time"
 		                                                    )
 
-		form = FormProcessor(False)
+		view = FormView()
 
 		if (user_profile_data['email'] != ""
 		    and session_user_profile is not None
@@ -710,7 +711,7 @@ Action for "view"
 			                               )
 			              )
 
-			form.add(field)
+			view.add(field)
 		#
 
 		if (user_profile_data['registration_time'] > 0):
@@ -718,14 +719,14 @@ Action for "view"
 			field = InfoField("uregistration_time")
 			field.set_title(L10n.get("pas_http_user_registration_time"))
 			field.set_value(DateTime.format_l10n(DateTime.TYPE_DATE_TIME_SHORT, user_profile_data['registration_time']))
-			form.add(field)
+			view.add(field)
 
 			if (session_user_is_administrator and user_profile_data['registration_ip'] != ""):
 			#
 				field = InfoField("uregistration_ip")
 				field.set_title(L10n.get("pas_http_user_registration_ip"))
 				field.set_value(user_profile_data['registration_ip'])
-				form.add(field)
+				view.add(field)
 			#
 		#
 
@@ -734,14 +735,14 @@ Action for "view"
 			field = InfoField("ulastvisit_time")
 			field.set_title(L10n.get("pas_http_user_lastvisit_time"))
 			field.set_value(DateTime.format_l10n(DateTime.TYPE_DATE_TIME_SHORT, user_profile_data['lastvisit_time']))
-			form.add(field)
+			view.add(field)
 
 			if (session_user_is_administrator and user_profile_data['lastvisit_ip'] != ""):
 			#
 				field = InfoField("ulastvisit_ip")
 				field.set_title(L10n.get("pas_http_user_lastvisit_ip"))
 				field.set_value(user_profile_data['lastvisit_ip'])
-				form.add(field)
+				view.add(field)
 			#
 		#
 
@@ -749,7 +750,7 @@ Action for "view"
 		            "username": user_profile_data['name'],
 		            "usertitle": user_profile_data['title'],
 		            "signature": user_profile_data['signature'],
-		            "form": { "object": form }
+		            "details_form_view": { "object": view }
 		          }
 
 		self.response.init()

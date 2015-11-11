@@ -6,5 +6,5 @@
 [/if]
 [if:content:signature != ][rewrite:user_signature_box]signature[/rewrite][/if]
 	</div>
-[block:content:form]output.Form.render[/block]
+[block:content:details_form_view]output.Form.render_view[/block]
 </article>
