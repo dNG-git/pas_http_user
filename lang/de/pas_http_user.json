@@ -58,5 +58,6 @@
  "errors_pas_http_user_locked": "Der angegebene Benutzername wurde durch die Administration oder das System gesperrt.",
  "errors_pas_http_user_password_invalid": "Das angegebene Passwort ist ungültig.",
  "errors_pas_http_user_pid_invalid": "Der angegebene Benutzer ist ungültig.",
+ "errors_pas_http_user_registration_disabled": "Die Funktion zur Benutzer-Registrierung wurde abgeschaltet.",
  "errors_pas_http_user_username_or_password_invalid": "Der angegebene Benutzername oder dessen Passwort sind ungültig."
 }

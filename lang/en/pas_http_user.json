@@ -58,5 +58,6 @@
  "errors_pas_http_user_locked": "The user name given has been locked by the administration or the system.",
  "errors_pas_http_user_password_invalid": "The password given is invalid.",
  "errors_pas_http_user_pid_invalid": "The user given is invalid.",
+ "errors_pas_http_user_registration_disabled": "The user registration feature has been disabled.",
  "errors_pas_http_user_username_or_password_invalid": "The user name or password given is invalid."
 }
