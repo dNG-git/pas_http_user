@@ -183,7 +183,7 @@ Action for "edit"
 
 		L10n.init("pas_http_user")
 
-		session = self.request.get_session()
+		session = (self.request.get_session() if (self.request.is_supported("session")) else None)
 
 		session_user_is_administrator = False
 		session_user_pid = None
@@ -391,7 +391,7 @@ Action for public "change-*" requests
 
 		L10n.init("pas_http_user")
 
-		session = self.request.get_session()
+		session = (self.request.get_session() if (self.request.is_supported("session")) else None)
 
 		pid = None
 		if (session is not None): pid = session.get_user_id()
@@ -631,7 +631,7 @@ Action for "view"
 
 		L10n.init("pas_http_user")
 
-		session = self.request.get_session()
+		session = (self.request.get_session() if (self.request.is_supported("session")) else None)
 
 		session_user_is_administrator = False
 		session_user_pid = None

@@ -88,6 +88,8 @@ Action for "login"
 		               priority = 7
 		              )
 
+		if (not self.request.is_supported("session")): raise TranslatableError("core_unknown_error", 500)
+
 		is_cookie_supported = Settings.get("pas_http_site_cookies_supported", True)
 
 		if (is_cookie_supported
@@ -228,6 +230,8 @@ Action for "login-alternatives-list"
 
 		L10n.init("pas_http_user")
 
+		if (not self.request.is_supported("session")): raise TranslatableError("core_unknown_error", 500)
+
 		services_list = Settings.get("pas_http_user_alternative_login_services_list")
 
 		if ((not Settings.get("pas_http_site_cookies_supported", True))
@@ -300,6 +304,8 @@ Action for "logout"
 		               icon = "mini-default-back",
 		               priority = 7
 		              )
+
+		if (not self.request.is_supported("session")): raise TranslatableError("core_unknown_error", 500)
 
 		session = Session.load(session_create = False)
 
