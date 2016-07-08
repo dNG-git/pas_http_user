@@ -18,12 +18,12 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.pas.controller.predefined_http_request import PredefinedHttpRequest
-from dNG.pas.data.tasks.database import Database as DatabaseTasks
-from dNG.pas.data.tasks.database_proxy import DatabaseProxy as DatabaseTasksProxy
-from dNG.pas.data.text.l10n import L10n
-from dNG.pas.module.named_loader import NamedLoader
-from dNG.pas.tasks.abstract import Abstract as AbstractTask
+from dNG.controller.predefined_http_request import PredefinedHttpRequest
+from dNG.data.tasks.database import Database as DatabaseTasks
+from dNG.data.tasks.database_proxy import DatabaseProxy as DatabaseTasksProxy
+from dNG.data.text.l10n import L10n
+from dNG.module.named_loader import NamedLoader
+from dNG.tasks.abstract import Abstract as AbstractTask
 
 class RegistrationValidated(AbstractTask):
 #
@@ -31,11 +31,11 @@ class RegistrationValidated(AbstractTask):
 The "RegistrationValidated" task is executed after the user clicked on the
 link of the registration e-mail.
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -48,7 +48,7 @@ Constructor __init__(RegistrationValidated)
 :param username: Username validated
 :param vid: Verification ID
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		AbstractTask.__init__(self)
@@ -68,10 +68,10 @@ Verification ID
 		"""
 Task execution
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
-		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+		user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 
 		user_profile = user_profile_class.load_username(self.username)
 		user_profile.unlock()

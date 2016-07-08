@@ -20,21 +20,22 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 
 import re
 
-from dNG.pas.controller.predefined_http_request import PredefinedHttpRequest
-from dNG.pas.data.settings import Settings
-from dNG.pas.data.http.translatable_error import TranslatableError
-from dNG.pas.data.http.translatable_exception import TranslatableException
-from dNG.pas.data.session.implementation import Implementation as Session
-from dNG.pas.data.text.input_filter import InputFilter
-from dNG.pas.data.text.l10n import L10n
-from dNG.pas.data.xhtml.link import Link
-from dNG.pas.data.xhtml.notification_store import NotificationStore
-from dNG.pas.data.xhtml.form.password_field import PasswordField
-from dNG.pas.data.xhtml.form.processor import Processor as FormProcessor
-from dNG.pas.data.xhtml.form.radio_field import RadioField
-from dNG.pas.data.xhtml.form.text_field import TextField
-from dNG.pas.database.nothing_matched_exception import NothingMatchedException
-from dNG.pas.module.named_loader import NamedLoader
+from dNG.controller.predefined_http_request import PredefinedHttpRequest
+from dNG.data.http.translatable_error import TranslatableError
+from dNG.data.http.translatable_exception import TranslatableException
+from dNG.data.session.implementation import Implementation as Session
+from dNG.data.settings import Settings
+from dNG.data.text.input_filter import InputFilter
+from dNG.data.text.l10n import L10n
+from dNG.data.xhtml.form.password_field import PasswordField
+from dNG.data.xhtml.form.processor import Processor as FormProcessor
+from dNG.data.xhtml.form.radio_field import RadioField
+from dNG.data.xhtml.form.text_field import TextField
+from dNG.data.xhtml.link import Link
+from dNG.data.xhtml.notification_store import NotificationStore
+from dNG.database.nothing_matched_exception import NothingMatchedException
+from dNG.module.named_loader import NamedLoader
+
 from .module import Module
 
 class Status(Module):
@@ -42,11 +43,11 @@ class Status(Module):
 	"""
 Service for "m=user;s=status"
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  (C) direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -56,7 +57,7 @@ Service for "m=user;s=status"
 		"""
 Action for "login"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
@@ -144,7 +145,7 @@ Action for "login"
 			username = InputFilter.filter_control_chars(form.get_value("uusername"))
 			password = InputFilter.filter_control_chars(form.get_value("upassword"))
 
-			user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+			user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 			if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 			try: user_profile = user_profile_class.load_username(username)
@@ -199,7 +200,7 @@ Action for "login"
 		"""
 Action for "login-safe"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self.execute_login(self.request.get_type() == "POST")
@@ -210,7 +211,7 @@ Action for "login-safe"
 		"""
 Action for "login-alternatives-list"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
@@ -280,7 +281,7 @@ Action for "login-alternatives-list"
 		"""
 Action for "logout"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()

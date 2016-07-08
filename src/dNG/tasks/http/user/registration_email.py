@@ -18,41 +18,40 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.pas.data.settings import Settings
-from .verification_email_renderer import VerificationEMailRenderer
+from .abstract_verification_email import AbstractVerificationEMail
 
-class RegistrationEMailRenderer(VerificationEMailRenderer):
+class RegistrationEMail(AbstractVerificationEMail):
 #
 	"""
-"RegistrationEMailRenderer" creates the registration e-mail.
+The "RegistrationEMail" task will send a registration e-mail to the user
+profile's address.
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
 
-	# pylint: disable=arguments-differ
+	EMAIL_RENDERER = "dNG.data.text.user.RegistrationEMailRenderer"
+	"""
+E-mail renderer to be used to send the verification
+	"""
 
-	def __init__(self, l10n = None):
+	def get_email_subject(self, l10n):
 	#
 		"""
-Constructor __init__(RegistrationEMailRenderer)
+Returns the verification e-mail subject.
 
 :param l10n: L10n instance
 
-:since: v0.1.00
+:return: (str) Verification e-mail subject; None for default subject
+:since:  v0.2.00
 		"""
 
-		VerificationEMailRenderer.__init__(self, l10n)
-
-		self.verification_details = Settings.get_lang_associated("pas_http_user_registration_welcome_text",
-		                                                         self.l10n.get_lang(),
-		                                                         self.l10n.get("pas_http_user_registration_pending_email_message")
-		                                                        )
+		return l10n.get("pas_http_user_title_registration")
 	#
 #
 

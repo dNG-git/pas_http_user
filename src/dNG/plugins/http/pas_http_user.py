@@ -18,10 +18,10 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.pas.plugins.hook import Hook
-from dNG.pas.runtime.value_exception import ValueException
-from dNG.pas.tasks.http.user.changes_confirmed import ChangesConfirmed
-from dNG.pas.tasks.http.user.registration_validated import RegistrationValidated
+from dNG.plugins.hook import Hook
+from dNG.runtime.value_exception import ValueException
+from dNG.tasks.http.user.changes_confirmed import ChangesConfirmed
+from dNG.tasks.http.user.registration_validated import RegistrationValidated
 
 def changes_confirmed(params, last_return = None):
 #
@@ -32,7 +32,7 @@ Called for "dNG.pas.user.Profile.changesConfirmed"
 :param last_return: The return value from the last hook called.
 
 :return: (mixed) Return value
-:since:  v0.1.00
+:since:  v0.2.00
 	"""
 
 	if (last_return is not None): _return = last_return
@@ -50,7 +50,7 @@ def register_plugin():
 	"""
 Register plugin hooks.
 
-:since: v0.1.00
+:since: v0.2.00
 	"""
 
 	Hook.register("dNG.pas.user.Profile.changesConfirmed", changes_confirmed)
@@ -66,7 +66,7 @@ Called for "dNG.pas.user.Profile.registrationValidated"
 :param last_return: The return value from the last hook called.
 
 :return: (mixed) Return value
-:since:  v0.1.00
+:since:  v0.2.00
 	"""
 
 	if (last_return is not None): _return = last_return
@@ -81,7 +81,7 @@ def unregister_plugin():
 	"""
 Unregister plugin hooks.
 
-:since: v0.1.00
+:since: v0.2.00
 	"""
 
 	Hook.unregister("dNG.pas.user.Profile.changesConfirmed", changes_confirmed)

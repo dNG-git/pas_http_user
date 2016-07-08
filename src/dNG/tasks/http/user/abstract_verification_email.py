@@ -20,11 +20,11 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 
 from dNG.data.rfc.email.message import Message
 from dNG.data.rfc.email.part import Part
-from dNG.pas.data.text.l10n import L10n
-from dNG.pas.net.smtp.client import Client as SmtpClient
-from dNG.pas.module.named_loader import NamedLoader
-from dNG.pas.runtime.value_exception import ValueException
-from dNG.pas.tasks.abstract import Abstract as AbstractTask
+from dNG.data.text.l10n import L10n
+from dNG.net.smtp.client import Client as SmtpClient
+from dNG.module.named_loader import NamedLoader
+from dNG.runtime.value_exception import ValueException
+from dNG.tasks.abstract import Abstract as AbstractTask
 
 class AbstractVerificationEMail(AbstractTask):
 #
@@ -32,11 +32,11 @@ class AbstractVerificationEMail(AbstractTask):
 The "AbstractVerificationEMail" task will send a verification e-mail to the user
 profile's address.
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -55,7 +55,7 @@ Constructor __init__(AbstractVerificationEMail)
 :param vid: Verification ID
 :param vid_timeout_days: Days until vID will time out
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		AbstractTask.__init__(self)
@@ -80,7 +80,7 @@ Verification ID timeout (as days)
 Returns the verification e-mail recipient address.
 
 :return: (str) Verification e-mail recipient; None for default recipient
-:since:  v0.1.00
+:since:  v0.2.00
 		"""
 
 		return None
@@ -94,7 +94,7 @@ Returns the verification e-mail subject.
 :param l10n: L10n instance
 
 :return: (str) Verification e-mail subject; None for default subject
-:since:  v0.1.00
+:since:  v0.2.00
 		"""
 
 		return None
@@ -105,12 +105,12 @@ Returns the verification e-mail subject.
 		"""
 Task execution
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		if (self.__class__.EMAIL_RENDERER is None): raise ValueException("Defined e-mail renderer is invalid")
 
-		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+		user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 		user_profile = user_profile_class.load_username(self.username)
 
 		user_profile_data = user_profile.get_data_attributes("name", "lang", "email")

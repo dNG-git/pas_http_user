@@ -18,9 +18,10 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.pas.data.settings import Settings
-from dNG.pas.data.text.input_filter import InputFilter
-from dNG.pas.data.text.l10n import L10n
+from dNG.data.settings import Settings
+from dNG.data.text.input_filter import InputFilter
+from dNG.data.text.l10n import L10n
+
 from .module import Module
 from .registration_mixin import RegistrationMixin
 
@@ -29,11 +30,11 @@ class Index(Module, RegistrationMixin):
 	"""
 Service for "m=user"
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  (C) direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -43,7 +44,7 @@ Service for "m=user"
 		"""
 Constructor __init__(Index)
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		Module.__init__(self)
@@ -55,7 +56,7 @@ Constructor __init__(Index)
 		"""
 Action for "index"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self.execute_services()
@@ -66,7 +67,7 @@ Action for "index"
 		"""
 Action for "register"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
@@ -83,7 +84,7 @@ Action for "register"
 		"""
 Action for "register-save"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self.execute_register(self.request.get_type() == "POST")
@@ -94,7 +95,7 @@ Action for "register-save"
 		"""
 Action for "services"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		L10n.init("pas_http_user")

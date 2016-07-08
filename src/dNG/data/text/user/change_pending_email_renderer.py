@@ -25,11 +25,11 @@ class ChangePendingEMailRenderer(VerificationEMailRenderer):
 	"""
 "ChangePendingEMailRenderer" creates the changes confirmation e-mail.
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -43,7 +43,7 @@ Constructor __init__(ChangePendingEMailRenderer)
 
 :param l10n: L10n instance
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		VerificationEMailRenderer.__init__(self, l10n)

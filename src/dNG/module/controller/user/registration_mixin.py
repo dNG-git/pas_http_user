@@ -21,37 +21,37 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 from os import urandom
 import re
 
-from dNG.pas.controller.predefined_http_request import PredefinedHttpRequest
-from dNG.pas.data.settings import Settings
-from dNG.pas.data.http.translatable_error import TranslatableError
-from dNG.pas.data.http.translatable_exception import TranslatableException
-from dNG.pas.data.tasks.database_proxy import DatabaseProxy as DatabaseTasks
-from dNG.pas.data.text.input_filter import InputFilter
-from dNG.pas.data.text.l10n import L10n
-from dNG.pas.data.text.md5 import Md5
-from dNG.pas.data.xhtml.link import Link
-from dNG.pas.data.xhtml.notification_store import NotificationStore
-from dNG.pas.data.xhtml.form.email_field import EMailField
-from dNG.pas.data.xhtml.form.form_tags_file_field import FormTagsFileField
-from dNG.pas.data.xhtml.form.info_field import InfoField
-from dNG.pas.data.xhtml.form.password_field import PasswordField
-from dNG.pas.data.xhtml.form.processor import Processor as FormProcessor
-from dNG.pas.data.xhtml.form.radio_field import RadioField
-from dNG.pas.data.xhtml.form.text_field import TextField
-from dNG.pas.database.nothing_matched_exception import NothingMatchedException
-from dNG.pas.database.transaction_context import TransactionContext
-from dNG.pas.module.named_loader import NamedLoader
+from dNG.controller.predefined_http_request import PredefinedHttpRequest
+from dNG.data.settings import Settings
+from dNG.data.http.translatable_error import TranslatableError
+from dNG.data.http.translatable_exception import TranslatableException
+from dNG.data.tasks.database_proxy import DatabaseProxy as DatabaseTasks
+from dNG.data.text.input_filter import InputFilter
+from dNG.data.text.l10n import L10n
+from dNG.data.text.md5 import Md5
+from dNG.data.xhtml.link import Link
+from dNG.data.xhtml.notification_store import NotificationStore
+from dNG.data.xhtml.form.email_field import EMailField
+from dNG.data.xhtml.form.form_tags_file_field import FormTagsFileField
+from dNG.data.xhtml.form.info_field import InfoField
+from dNG.data.xhtml.form.password_field import PasswordField
+from dNG.data.xhtml.form.processor import Processor as FormProcessor
+from dNG.data.xhtml.form.radio_field import RadioField
+from dNG.data.xhtml.form.text_field import TextField
+from dNG.database.nothing_matched_exception import NothingMatchedException
+from dNG.database.transaction_context import TransactionContext
+from dNG.module.named_loader import NamedLoader
 
 class RegistrationMixin(object):
 #
 	"""
 This mixin provides the registration form.
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  (C) direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -65,12 +65,12 @@ Form validator that checks if the e-mail is not already registered.
 :param validator_context: Form validator context
 
 :return: (str) Error message; None on success
-:since:  v0.1.00
+:since:  v0.2.00
 		"""
 
 		_return = None
 
-		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+		user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 
 		if (user_profile_class is None): _return = L10n.get("pas_http_core_form_error_internal_error")
 		else:
@@ -95,7 +95,7 @@ Form validator that checks if the TOS have been accepted.
 :param validator_context: Form validator context
 
 :return: (str) Error message; None on success
-:since:  v0.1.00
+:since:  v0.2.00
 		"""
 
 		return (None if (field.get_value() == "accepted") else L10n.get("pas_http_user_form_error_tos_required"))
@@ -110,12 +110,12 @@ Form validator that checks if the user name is not already registered.
 :param validator_context: Form validator context
 
 :return: (str) Error message; None on success
-:since:  v0.1.00
+:since:  v0.2.00
 		"""
 
 		_return = None
 
-		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+		user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 
 		if (user_profile_class is None): _return = L10n.get("pas_http_core_form_error_internal_error")
 		else:
@@ -143,7 +143,7 @@ Action for "register"
 :param target_iline: Target URI query string
 :param is_save_mode: True if the form is submitted
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		# pylint: disable=star-args
@@ -257,7 +257,7 @@ Action for "register"
 			if (not is_email_verified): email = InputFilter.filter_email_address(form.get_value("uemail"))
 			if (username is None): username = InputFilter.filter_control_chars(form.get_value("uusername"))
 
-			user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+			user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 			if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 			user_profile = user_profile_class()
@@ -298,7 +298,12 @@ Action for "register"
 				vid = Md5.hash(urandom(32))
 
 				database_tasks = DatabaseTasks.get_instance()
-				database_tasks.add("dNG.pas.user.Profile.delete.{0}".format(username), "dNG.pas.user.Profile.delete", cleanup_timeout, username = username)
+
+				database_tasks.add("dNG.pas.user.Profile.delete.{0}".format(username),
+				                   "dNG.pas.user.Profile.delete",
+				                   cleanup_timeout,
+				                   username = username
+				                  )
 
 				database_tasks.add("dNG.pas.user.Profile.sendRegistrationEMail.{0}".format(username),
 				                   "dNG.pas.user.Profile.sendRegistrationEMail",
@@ -308,7 +313,12 @@ Action for "register"
 				                   vid_timeout_days = cleanup_timeout_days
 				                  )
 
-				database_tasks.register_timeout(vid, "dNG.pas.user.Profile.registrationValidated", cleanup_timeout, username = username, vid = vid)
+				database_tasks.register_timeout(vid,
+				                                "dNG.pas.user.Profile.registrationValidated",
+				                                cleanup_timeout,
+				                                username = username,
+				                                vid = vid
+				                               )
 
 				self._on_pending_registration(user_id, source_iline, target_iline)
 			#
@@ -338,7 +348,7 @@ Called after "register" has added a pending user registration.
 :param source_iline: Source URI query string
 :param target_iline: Target URI query string
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		NotificationStore.get_instance().add_info(L10n.get("pas_http_user_done_registration_pending"))
@@ -356,7 +366,7 @@ Called after "register" has completed a user registration.
 :param source_iline: Source URI query string
 :param target_iline: Target URI query string
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		NotificationStore.get_instance().add_completed_info(L10n.get("pas_http_user_done_registration"))
@@ -372,7 +382,7 @@ Called after "register" to redirect to the given URI request string.
 
 :param iline: URI request string
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		Link.clear_store("servicemenu")

@@ -21,28 +21,29 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 from os import urandom
 import re
 
-from dNG.pas.controller.predefined_http_request import PredefinedHttpRequest
-from dNG.pas.data.settings import Settings
-from dNG.pas.data.http.translatable_error import TranslatableError
-from dNG.pas.data.http.translatable_exception import TranslatableException
-from dNG.pas.data.tasks.database_proxy import DatabaseProxy as DatabaseTasks
-from dNG.pas.data.text.date_time import DateTime
-from dNG.pas.data.text.input_filter import InputFilter
-from dNG.pas.data.text.l10n import L10n
-from dNG.pas.data.text.md5 import Md5
-from dNG.pas.data.xhtml.form_tags import FormTags
-from dNG.pas.data.xhtml.link import Link
-from dNG.pas.data.xhtml.notification_store import NotificationStore
-from dNG.pas.data.xhtml.form.email_field import EMailField
-from dNG.pas.data.xhtml.form.form_tags_text_field import FormTagsTextField
-from dNG.pas.data.xhtml.form.form_tags_textarea_field import FormTagsTextareaField
-from dNG.pas.data.xhtml.form.info_field import InfoField
-from dNG.pas.data.xhtml.form.password_field import PasswordField
-from dNG.pas.data.xhtml.form.processor import Processor as FormProcessor
-from dNG.pas.data.xhtml.form.text_field import TextField
-from dNG.pas.data.xhtml.form.view import View as FormView
-from dNG.pas.database.nothing_matched_exception import NothingMatchedException
-from dNG.pas.module.named_loader import NamedLoader
+from dNG.controller.predefined_http_request import PredefinedHttpRequest
+from dNG.data.http.translatable_error import TranslatableError
+from dNG.data.http.translatable_exception import TranslatableException
+from dNG.data.settings import Settings
+from dNG.data.tasks.database_proxy import DatabaseProxy as DatabaseTasks
+from dNG.data.text.date_time import DateTime
+from dNG.data.text.input_filter import InputFilter
+from dNG.data.text.l10n import L10n
+from dNG.data.text.md5 import Md5
+from dNG.data.xhtml.form_tags import FormTags
+from dNG.data.xhtml.link import Link
+from dNG.data.xhtml.notification_store import NotificationStore
+from dNG.data.xhtml.form.email_field import EMailField
+from dNG.data.xhtml.form.form_tags_text_field import FormTagsTextField
+from dNG.data.xhtml.form.form_tags_textarea_field import FormTagsTextareaField
+from dNG.data.xhtml.form.info_field import InfoField
+from dNG.data.xhtml.form.password_field import PasswordField
+from dNG.data.xhtml.form.processor import Processor as FormProcessor
+from dNG.data.xhtml.form.text_field import TextField
+from dNG.data.xhtml.form.view import View as FormView
+from dNG.database.nothing_matched_exception import NothingMatchedException
+from dNG.module.named_loader import NamedLoader
+
 from .module import Module
 
 class Profile(Module):
@@ -50,11 +51,11 @@ class Profile(Module):
 	"""
 Service for "m=user;s=profile"
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  (C) direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -77,7 +78,7 @@ Change the username
 		"""
 Action for "change-email"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self._execute_validated_profile_change(Profile.CHANGE_TYPE_EMAIL, "change-email")
@@ -88,7 +89,7 @@ Action for "change-email"
 		"""
 Action for "change-email-save"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self._execute_validated_profile_change(Profile.CHANGE_TYPE_EMAIL,
@@ -102,7 +103,7 @@ Action for "change-email-save"
 		"""
 Action for "change-username"
 
-:since: v0.1.01
+:since: v0.2.00
 		"""
 
 		self._execute_validated_profile_change(Profile.CHANGE_TYPE_USERNAME,
@@ -115,7 +116,7 @@ Action for "change-username"
 		"""
 Action for "change-username"
 
-:since: v0.1.01
+:since: v0.2.00
 		"""
 
 		self._execute_validated_profile_change(Profile.CHANGE_TYPE_USERNAME,
@@ -129,7 +130,7 @@ Action for "change-username"
 		"""
 Action for "change-username-password"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self._execute_validated_profile_change(Profile.CHANGE_TYPE_USERNAME | Profile.CHANGE_TYPE_PASSWORD,
@@ -142,7 +143,7 @@ Action for "change-username-password"
 		"""
 Action for "change-username-password"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self._execute_validated_profile_change(Profile.CHANGE_TYPE_USERNAME | Profile.CHANGE_TYPE_PASSWORD,
@@ -156,7 +157,7 @@ Action for "change-username-password"
 		"""
 Action for "index"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self.execute_view()
@@ -167,7 +168,7 @@ Action for "index"
 		"""
 Action for "edit"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		pid = InputFilter.filter_file_path(self.request.get_dsd("upid", ""))
@@ -203,7 +204,7 @@ Action for "edit"
 
 		if (pid == ""): raise TranslatableError("pas_http_user_pid_invalid", 404)
 
-		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+		user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 		if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 		try: user_profile = user_profile_class.load_id(pid)
@@ -366,7 +367,7 @@ Action for "edit"
 		"""
 Action for "edit-save"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		self.execute_edit(self.request.get_type() == "POST")
@@ -377,7 +378,7 @@ Action for "edit-save"
 		"""
 Action for public "change-*" requests
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
@@ -397,7 +398,7 @@ Action for public "change-*" requests
 		if (session is not None): pid = session.get_user_id()
 		if (pid is None): raise TranslatableError("pas_http_user_pid_invalid", 404)
 
-		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+		user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 		if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 		try: user_profile = user_profile_class.load_id(pid)
@@ -549,12 +550,12 @@ Action for public "change-*" requests
 				original_user_profile_data = user_profile.get_data_attributes(*user_profile_data_changed.keys())
 
 				database_tasks.add("dNG.pas.user.Profile.onEdited.{0}".format(username),
-				                                 "dNG.pas.user.Profile.onEdited",
-				                                 1,
-				                                 user_profile_id = pid,
-				                                 user_profile_data_changed = user_profile_data_changed,
-				                                 original_user_profile_data = original_user_profile_data
-				                                )
+				                   "dNG.pas.user.Profile.onEdited",
+				                   1,
+				                   user_profile_id = pid,
+				                   user_profile_data_changed = user_profile_data_changed,
+				                   original_user_profile_data = original_user_profile_data
+				                  )
 			#
 
 			if (change_email and current_email != new_email):
@@ -619,7 +620,7 @@ Action for public "change-*" requests
 		"""
 Action for "view"
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		pid = InputFilter.filter_file_path(self.request.get_dsd("upid", ""))
@@ -652,7 +653,7 @@ Action for "view"
 
 		if (pid == ""): raise TranslatableError("pas_http_user_pid_invalid", 404)
 
-		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+		user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 		if (user_profile_class is None): raise TranslatableException("core_unknown_error")
 
 		try: user_profile = user_profile_class.load_id(pid)

@@ -18,21 +18,21 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.pas.data.settings import Settings
-from dNG.pas.data.translatable_exception import TranslatableException
-from dNG.pas.database.connection import Connection
-from dNG.pas.module.controller.abstract_http import AbstractHttp as AbstractHttpController
+from dNG.data.settings import Settings
+from dNG.data.translatable_exception import TranslatableException
+from dNG.database.connection import Connection
+from dNG.module.controller.abstract_http import AbstractHttp as AbstractHttpController
 
 class Module(AbstractHttpController):
 #
 	"""
 Module for "user"
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  (C) direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -42,7 +42,7 @@ Module for "user"
 		"""
 Constructor __init__(Module)
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		AbstractHttpController.__init__(self)
@@ -55,7 +55,7 @@ Constructor __init__(Module)
 		"""
 Execute the requested action.
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		# pylint: disable=broad-except

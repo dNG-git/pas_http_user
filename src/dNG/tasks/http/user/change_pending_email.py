@@ -18,27 +18,61 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
+from dNG.data.tasks.database import Database as DatabaseTasks
+
 from .abstract_verification_email import AbstractVerificationEMail
 
-class RegistrationEMail(AbstractVerificationEMail):
+class ChangePendingEMail(AbstractVerificationEMail):
 #
 	"""
-The "RegistrationEMail" task will send a registration e-mail to the user
-profile's address.
+The "ChangePendingEMail" task will send an e-mail to confirm changes.
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
 
-	EMAIL_RENDERER = "dNG.pas.data.text.user.RegistrationEMailRenderer"
+	EMAIL_RENDERER = "dNG.data.text.user.ChangePendingEMailRenderer"
 	"""
 E-mail renderer to be used to send the verification
 	"""
+
+	def __init__(self, username, recipient, vid, vid_timeout_days):
+	#
+		"""
+Constructor __init__(ChangePendingEMail)
+
+:param username: Username to send the verification e-mail to
+:param recipient: Verification e-mail recipient address; None for default
+:param vid: Verification ID
+:param vid_timeout_days: Days until vID will time out
+
+:since: v0.2.00
+		"""
+
+		AbstractVerificationEMail.__init__(self, username, vid, vid_timeout_days)
+
+		self.recipient = recipient
+		"""
+Verification e-mail recipient
+		"""
+	#
+
+	def get_email_recipient(self):
+	#
+		"""
+Returns the verification e-mail recipient address.
+
+:return: (str) Verification e-mail recipient; None for default recipient
+:since:  v0.2.00
+		"""
+
+		return self.recipient
+	#
 
 	def get_email_subject(self, l10n):
 	#
@@ -48,10 +82,10 @@ Returns the verification e-mail subject.
 :param l10n: L10n instance
 
 :return: (str) Verification e-mail subject; None for default subject
-:since:  v0.1.00
+:since:  v0.2.00
 		"""
 
-		return l10n.get("pas_http_user_title_registration")
+		return l10n.get("pas_http_user_title_change_profile")
 	#
 #
 

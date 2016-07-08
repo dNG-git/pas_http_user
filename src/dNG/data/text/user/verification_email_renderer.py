@@ -18,21 +18,21 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.pas.data.settings import Settings
-from dNG.pas.data.text.email_renderer import EMailRenderer
-from dNG.pas.data.text.l10n import L10n
-from dNG.pas.data.text.link import Link
+from dNG.data.settings import Settings
+from dNG.data.text.email_renderer import EMailRenderer
+from dNG.data.text.l10n import L10n
+from dNG.data.text.link import Link
 
 class VerificationEMailRenderer(EMailRenderer):
 #
 	"""
 "VerificationEMailRenderer" creates the verification e-mail.
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -46,7 +46,7 @@ Constructor __init__(VerificationEMailRenderer)
 
 :param l10n: L10n instance
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		EMailRenderer.__init__(self, l10n)
@@ -71,7 +71,7 @@ Render header, body and footer suitable for e-mail delivery.
 :param reason: Reason for automated delivery
 
 :return: (str) Rendered e-mail body
-:since:  v0.1.00
+:since:  v0.2.00
 		"""
 
 		vid_url = "{0}tasks.d/{1}".format(Link.get_preferred().build_url(Link.TYPE_ABSOLUTE_URL | Link.TYPE_BASE_PATH),

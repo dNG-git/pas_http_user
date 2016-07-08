@@ -22,12 +22,12 @@ import re
 
 from dNG.data.rfc.email.message import Message
 from dNG.data.rfc.email.part import Part
-from dNG.pas.data.settings import Settings
-from dNG.pas.data.text.l10n import L10n
-from dNG.pas.data.text.tmd5 import Tmd5
-from dNG.pas.net.smtp.client import Client as SmtpClient
-from dNG.pas.module.named_loader import NamedLoader
-from dNG.pas.tasks.abstract import Abstract as AbstractTask
+from dNG.data.settings import Settings
+from dNG.data.text.l10n import L10n
+from dNG.data.text.tmd5 import Tmd5
+from dNG.net.smtp.client import Client as SmtpClient
+from dNG.module.named_loader import NamedLoader
+from dNG.tasks.abstract import Abstract as AbstractTask
 
 class UpdateSecID(AbstractTask):
 #
@@ -35,11 +35,11 @@ class UpdateSecID(AbstractTask):
 The "UpdateSecID" task generates a new "Security ID string" for a given user
 and notifies him via e-mail.
 
-:author:     direct Netware Group
+:author:     direct Netware Group et al.
 :copyright:  direct Netware Group - All rights reserved
 :package:    pas.http
 :subpackage: user
-:since:      v0.1.00
+:since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
 	"""
@@ -51,7 +51,7 @@ Constructor __init__(UpdateSecID)
 
 :param username: Username to unlock
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
 		AbstractTask.__init__(self)
@@ -70,10 +70,10 @@ Username to send the e-mail to
 		"""
 Task execution
 
-:since: v0.1.00
+:since: v0.2.00
 		"""
 
-		user_profile_class = NamedLoader.get_class("dNG.pas.data.user.Profile")
+		user_profile_class = NamedLoader.get_class("dNG.data.user.Profile")
 		user_profile = user_profile_class.load_username(self.username)
 
 		secid = user_profile_class.generate_secid()
@@ -90,7 +90,7 @@ Task execution
 
 		l10n = L10n.get_instance(user_profile_data['lang'])
 
-		email_renderer = NamedLoader.get_instance("dNG.pas.data.text.user.SecIDUpdatedEMailRenderer", l10n = l10n)
+		email_renderer = NamedLoader.get_instance("dNG.data.text.user.SecIDUpdatedEMailRenderer", l10n = l10n)
 		content = email_renderer.render(user_profile_data, secid)
 		subject = l10n.get("pas_http_user_title_sec_id_updated")
 
