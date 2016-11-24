@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-##j## BOF
 
 """
 direct PAS
@@ -25,21 +24,19 @@ from dNG.tasks.http.user.registration_email import RegistrationEMail
 from dNG.tasks.http.user.update_sec_id import UpdateSecID
 
 def register_plugin():
-#
-	"""
+    """
 Register plugin hooks.
 
 :since: v0.2.00
-	"""
+    """
 
-	Hook.register("dNG.pas.user.Profile.sendChangePendingEMail", send_change_pending_email)
-	Hook.register("dNG.pas.user.Profile.sendRegistrationEMail", send_registration_email)
-	Hook.register("dNG.pas.user.Profile.updateSecID", update_sec_id)
+    Hook.register("dNG.pas.user.Profile.sendChangePendingEMail", send_change_pending_email)
+    Hook.register("dNG.pas.user.Profile.sendRegistrationEMail", send_registration_email)
+    Hook.register("dNG.pas.user.Profile.updateSecID", update_sec_id)
 #
 
 def send_change_pending_email(params, last_return = None):
-#
-	"""
+    """
 Called for "dNG.pas.user.Profile.sendChangePendingEMail"
 
 :param params: Parameter specified
@@ -47,30 +44,28 @@ Called for "dNG.pas.user.Profile.sendChangePendingEMail"
 
 :return: (mixed) Return value
 :since:  v0.2.00
-	"""
+    """
 
-	if (last_return is not None): _return = last_return
-	elif ("username" not in params
-	      or "vid" not in params
-	      or "vid_timeout_days" not in params
-	     ): raise ValueException("Missing required arguments")
-	else:
-	#
-		ChangePendingEMail(params['username'],
-		                   params.get("recipient"),
-		                   params['vid'],
-		                   params['vid_timeout_days']
-		                  ).run()
+    if (last_return is not None): _return = last_return
+    elif ("username" not in params
+          or "vid" not in params
+          or "vid_timeout_days" not in params
+         ): raise ValueException("Missing required arguments")
+    else:
+        ChangePendingEMail(params['username'],
+                           params.get("recipient"),
+                           params['vid'],
+                           params['vid_timeout_days']
+                          ).run()
 
-		_return = True
-	#
+        _return = True
+    #
 
-	return _return
+    return _return
 #
 
 def send_registration_email(params, last_return = None):
-#
-	"""
+    """
 Called for "dNG.pas.user.Profile.sendRegistrationEMail"
 
 :param params: Parameter specified
@@ -78,38 +73,35 @@ Called for "dNG.pas.user.Profile.sendRegistrationEMail"
 
 :return: (mixed) Return value
 :since:  v0.2.00
-	"""
+    """
 
-	if (last_return is not None): _return = last_return
-	elif ("username" not in params
-	      or "vid" not in params
-	      or "vid_timeout_days" not in params
-	     ): raise ValueException("Missing required arguments")
-	else:
-	#
-		RegistrationEMail(params['username'], params['vid'], params['vid_timeout_days']).run()
-		_return = True
-	#
+    if (last_return is not None): _return = last_return
+    elif ("username" not in params
+          or "vid" not in params
+          or "vid_timeout_days" not in params
+         ): raise ValueException("Missing required arguments")
+    else:
+        RegistrationEMail(params['username'], params['vid'], params['vid_timeout_days']).run()
+        _return = True
+    #
 
-	return _return
+    return _return
 #
 
 def unregister_plugin():
-#
-	"""
+    """
 Unregister plugin hooks.
 
 :since: v0.2.00
-	"""
+    """
 
-	Hook.unregister("dNG.pas.user.Profile.sendChangePendingEMail", send_change_pending_email)
-	Hook.unregister("dNG.pas.user.Profile.sendRegistrationEMail", send_registration_email)
-	Hook.unregister("dNG.pas.user.Profile.updateSecID", update_sec_id)
+    Hook.unregister("dNG.pas.user.Profile.sendChangePendingEMail", send_change_pending_email)
+    Hook.unregister("dNG.pas.user.Profile.sendRegistrationEMail", send_registration_email)
+    Hook.unregister("dNG.pas.user.Profile.updateSecID", update_sec_id)
 #
 
 def update_sec_id(params, last_return = None):
-#
-	"""
+    """
 Called for "dNG.pas.user.Profile.updateSecID"
 
 :param params: Parameter specified
@@ -117,17 +109,14 @@ Called for "dNG.pas.user.Profile.updateSecID"
 
 :return: (mixed) Return value
 :since:  v0.2.00
-	"""
+    """
 
-	if (last_return is not None): _return = last_return
-	elif ("username" not in params): raise ValueException("Missing required argument")
-	else:
-	#
-		UpdateSecID(params['username']).run()
-		_return = True
-	#
+    if (last_return is not None): _return = last_return
+    elif ("username" not in params): raise ValueException("Missing required argument")
+    else:
+        UpdateSecID(params['username']).run()
+        _return = True
+    #
 
-	return _return
+    return _return
 #
-
-##j## EOF

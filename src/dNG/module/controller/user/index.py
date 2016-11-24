@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-##j## BOF
 
 """
 direct PAS
@@ -26,8 +25,7 @@ from .module import Module
 from .registration_mixin import RegistrationMixin
 
 class Index(Module, RegistrationMixin):
-#
-	"""
+    """
 Service for "m=user"
 
 :author:     direct Netware Group et al.
@@ -37,77 +35,70 @@ Service for "m=user"
 :since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
-	"""
+    """
 
-	def __init__(self):
-	#
-		"""
+    def __init__(self):
+        """
 Constructor __init__(Index)
 
 :since: v0.2.00
-		"""
+        """
 
-		Module.__init__(self)
-		RegistrationMixin.__init__(self)
-	#
+        Module.__init__(self)
+        RegistrationMixin.__init__(self)
+    #
 
-	def execute_index(self):
-	#
-		"""
+    def execute_index(self):
+        """
 Action for "index"
 
 :since: v0.2.00
-		"""
+        """
 
-		self.execute_services()
-	#
+        self.execute_services()
+    #
 
-	def execute_register(self, is_save_mode = False):
-	#
-		"""
+    def execute_register(self, is_save_mode = False):
+        """
 Action for "register"
 
 :since: v0.2.00
-		"""
+        """
 
-		source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
-		target_iline = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
+        source_iline = InputFilter.filter_control_chars(self.request.get_dsd("source", "")).strip()
+        target_iline = InputFilter.filter_control_chars(self.request.get_dsd("target", "")).strip()
 
-		self._execute_register(source_iline = source_iline,
-		                       target_iline = target_iline,
-		                       is_save_mode = is_save_mode
-		                      )
-	#
+        self._execute_register(source_iline = source_iline,
+                               target_iline = target_iline,
+                               is_save_mode = is_save_mode
+                              )
+    #
 
-	def execute_register_save(self):
-	#
-		"""
+    def execute_register_save(self):
+        """
 Action for "register-save"
 
 :since: v0.2.00
-		"""
+        """
 
-		self.execute_register(self.request.get_type() == "POST")
-	#
+        self.execute_register(self.request.get_type() == "POST")
+    #
 
-	def execute_services(self):
-	#
-		"""
+    def execute_services(self):
+        """
 Action for "services"
 
 :since: v0.2.00
-		"""
+        """
 
-		L10n.init("pas_http_user")
+        L10n.init("pas_http_user")
 
-		content = { "title": L10n.get("pas_http_user_services"),
-		            "service_list": { "file": "{0}/settings/lists/pas_user.service.json".format(Settings.get("path_data")) }
-		          }
+        content = { "title": L10n.get("pas_http_user_services"),
+                    "service_list": { "file": "{0}/settings/lists/pas_user.service.json".format(Settings.get("path_data")) }
+                  }
 
-		self.response.init()
-		self.response.set_title(content['title'])
-		self.response.add_oset_content("core.service_list", content)
-	#
+        self.response.init()
+        self.response.set_title(content['title'])
+        self.response.add_oset_content("core.service_list", content)
+    #
 #
-
-##j## EOF

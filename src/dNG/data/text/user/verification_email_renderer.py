@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-##j## BOF
 
 """
 direct PAS
@@ -24,8 +23,7 @@ from dNG.data.text.l10n import L10n
 from dNG.data.text.link import Link
 
 class VerificationEMailRenderer(EMailRenderer):
-#
-	"""
+    """
 "VerificationEMailRenderer" creates the verification e-mail.
 
 :author:     direct Netware Group et al.
@@ -35,36 +33,34 @@ class VerificationEMailRenderer(EMailRenderer):
 :since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
-	"""
+    """
 
-	# pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ
 
-	def __init__(self, l10n = None):
-	#
-		"""
+    def __init__(self, l10n = None):
+        """
 Constructor __init__(VerificationEMailRenderer)
 
 :param l10n: L10n instance
 
 :since: v0.2.00
-		"""
+        """
 
-		EMailRenderer.__init__(self, l10n)
+        EMailRenderer.__init__(self, l10n)
 
-		self.verification_details = None
-		"""
+        self.verification_details = None
+        """
 Details text about what will be verified with the task link
-		"""
+        """
 
-		Settings.read_file("{0}/settings/pas_http.json".format(Settings.get("path_data")))
-		Settings.read_file("{0}/settings/pas_http_user.json".format(Settings.get("path_data")))
+        Settings.read_file("{0}/settings/pas_http.json".format(Settings.get("path_data")))
+        Settings.read_file("{0}/settings/pas_http_user.json".format(Settings.get("path_data")))
 
-		L10n.init("pas_http_user", self.l10n.get_lang())
-	#
+        L10n.init("pas_http_user", self.l10n.get_lang())
+    #
 
-	def render(self, user_profile_data, vid, vid_timeout_days):
-	#
-		"""
+    def render(self, user_profile_data, vid, vid_timeout_days):
+        """
 Render header, body and footer suitable for e-mail delivery.
 
 :param body: Preformatted e-mail body
@@ -72,15 +68,15 @@ Render header, body and footer suitable for e-mail delivery.
 
 :return: (str) Rendered e-mail body
 :since:  v0.2.00
-		"""
+        """
 
-		vid_url = "{0}tasks.d/{1}".format(Link.get_preferred().build_url(Link.TYPE_ABSOLUTE_URL | Link.TYPE_BASE_PATH),
-		                                  Link.encode_query_value(vid)
-		                                 )
+        vid_url = "{0}tasks.d/{1}".format(Link.get_preferred().build_url(Link.TYPE_ABSOLUTE_URL | Link.TYPE_BASE_PATH),
+                                          Link.encode_query_value(vid)
+                                         )
 
-		content = ("" if (self.verification_details is None) else self.verification_details)
+        content = ("" if (self.verification_details is None) else self.verification_details)
 
-		content += """
+        content += """
 
 {0}: {1}
 {2}: {3}
@@ -88,17 +84,15 @@ Render header, body and footer suitable for e-mail delivery.
 {4}
 {5}
 {6}
-		""".format(self.l10n.get("pas_core_username"),
-		           user_profile_data['name'],
-		           self.l10n.get("pas_http_user_verification_timeout_days"),
-		           vid_timeout_days,
-		           self.l10n.get("pas_http_user_verification_link_required"),
-		           vid_url,
-		           self.l10n.get("pas_email_url_notice")
-		          )
+        """.format(self.l10n.get("pas_core_username"),
+                   user_profile_data['name'],
+                   self.l10n.get("pas_http_user_verification_timeout_days"),
+                   vid_timeout_days,
+                   self.l10n.get("pas_http_user_verification_link_required"),
+                   vid_url,
+                   self.l10n.get("pas_email_url_notice")
+                  )
 
-		return EMailRenderer.render(self, content, self.REASON_FOR_VALIDATION)
-	#
+        return EMailRenderer.render(self, content, self.REASON_FOR_VALIDATION)
+    #
 #
-
-##j## EOF

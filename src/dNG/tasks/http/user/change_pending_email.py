@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-##j## BOF
 
 """
 direct PAS
@@ -18,13 +17,10 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 #echo(__FILEPATH__)#
 """
 
-from dNG.data.tasks.database import Database as DatabaseTasks
-
 from .abstract_verification_email import AbstractVerificationEMail
 
 class ChangePendingEMail(AbstractVerificationEMail):
-#
-	"""
+    """
 The "ChangePendingEMail" task will send an e-mail to confirm changes.
 
 :author:     direct Netware Group et al.
@@ -34,16 +30,15 @@ The "ChangePendingEMail" task will send an e-mail to confirm changes.
 :since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
-	"""
+    """
 
-	EMAIL_RENDERER = "dNG.data.text.user.ChangePendingEMailRenderer"
-	"""
+    EMAIL_RENDERER = "dNG.data.text.user.ChangePendingEMailRenderer"
+    """
 E-mail renderer to be used to send the verification
-	"""
+    """
 
-	def __init__(self, username, recipient, vid, vid_timeout_days):
-	#
-		"""
+    def __init__(self, username, recipient, vid, vid_timeout_days):
+        """
 Constructor __init__(ChangePendingEMail)
 
 :param username: Username to send the verification e-mail to
@@ -52,41 +47,37 @@ Constructor __init__(ChangePendingEMail)
 :param vid_timeout_days: Days until vID will time out
 
 :since: v0.2.00
-		"""
+        """
 
-		AbstractVerificationEMail.__init__(self, username, vid, vid_timeout_days)
+        AbstractVerificationEMail.__init__(self, username, vid, vid_timeout_days)
 
-		self.recipient = recipient
-		"""
+        self.recipient = recipient
+        """
 Verification e-mail recipient
-		"""
-	#
+        """
+    #
 
-	def get_email_recipient(self):
-	#
-		"""
+    def get_email_recipient(self):
+        """
 Returns the verification e-mail recipient address.
 
 :return: (str) Verification e-mail recipient; None for default recipient
 :since:  v0.2.00
-		"""
+        """
 
-		return self.recipient
-	#
+        return self.recipient
+    #
 
-	def get_email_subject(self, l10n):
-	#
-		"""
+    def get_email_subject(self, l10n):
+        """
 Returns the verification e-mail subject.
 
 :param l10n: L10n instance
 
 :return: (str) Verification e-mail subject; None for default subject
 :since:  v0.2.00
-		"""
+        """
 
-		return l10n.get("pas_http_user_title_change_profile")
-	#
+        return l10n.get("pas_http_user_title_change_profile")
+    #
 #
-
-##j## EOF

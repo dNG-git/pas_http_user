@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-##j## BOF
 
 """
 direct PAS
@@ -21,8 +20,7 @@ https://www.direct-netware.de/redirect?licenses;mpl2
 from .verification_email_renderer import VerificationEMailRenderer
 
 class ChangePendingEMailRenderer(VerificationEMailRenderer):
-#
-	"""
+    """
 "ChangePendingEMailRenderer" creates the changes confirmation e-mail.
 
 :author:     direct Netware Group et al.
@@ -32,24 +30,21 @@ class ChangePendingEMailRenderer(VerificationEMailRenderer):
 :since:      v0.2.00
 :license:    https://www.direct-netware.de/redirect?licenses;mpl2
              Mozilla Public License, v. 2.0
-	"""
+    """
 
-	# pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ
 
-	def __init__(self, l10n = None):
-	#
-		"""
+    def __init__(self, l10n = None):
+        """
 Constructor __init__(ChangePendingEMailRenderer)
 
 :param l10n: L10n instance
 
 :since: v0.2.00
-		"""
+        """
 
-		VerificationEMailRenderer.__init__(self, l10n)
+        VerificationEMailRenderer.__init__(self, l10n)
 
-		self.verification_details = self.l10n.get("pas_http_user_change_profile_pending_email_message")
-	#
+        self.verification_details = self.l10n.get("pas_http_user_change_profile_pending_email_message")
+    #
 #
-
-##j## EOF
