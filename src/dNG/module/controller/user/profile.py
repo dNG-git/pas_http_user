@@ -62,11 +62,11 @@ Service for "m=user;s=profile"
     """
 Change the e-mail address
     """
-    CHANGE_TYPE_PASSWORD = 2
+    CHANGE_TYPE_PASSWORD = 1 << 1
     """
 Change the password
     """
-    CHANGE_TYPE_USERNAME = 4
+    CHANGE_TYPE_USERNAME = 1 << 2
     """
 Change the username
     """
